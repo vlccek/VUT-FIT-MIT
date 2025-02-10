@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02 -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="" data-darkreader-mode="dynamic" data-darkreader-scheme="dark" data-darkreader-proxy-injected="true" class=" lgujgapp idc0_350"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style class="darkreader darkreader--fallback" media="screen"></style><style class="darkreader darkreader--text" media="screen"></style><style class="darkreader darkreader--invert" media="screen">.jfk-bubble.gtx-bubble, .captcheck_answer_label > input + img, span#closed_text > img[src^="https://www.gstatic.com/images/branding/googlelogo"], span[data-href^="https://www.hcaptcha.com/"] > #icon, img.Wirisformula {
+    filter: invert(100%) hue-rotate(180deg) contrast(90%) !important;
+}</style><style class="darkreader darkreader--inline" media="screen">[data-darkreader-inline-bgcolor] {
+  background-color: var(--darkreader-inline-bgcolor) !important;
+}
+[data-darkreader-inline-bgimage] {
+  background-image: var(--darkreader-inline-bgimage) !important;
+}
+[data-darkreader-inline-border] {
+  border-color: var(--darkreader-inline-border) !important;
+}
+[data-darkreader-inline-border-bottom] {
+  border-bottom-color: var(--darkreader-inline-border-bottom) !important;
+}
+[data-darkreader-inline-border-left] {
+  border-left-color: var(--darkreader-inline-border-left) !important;
+}
+[data-darkreader-inline-border-right] {
+  border-right-color: var(--darkreader-inline-border-right) !important;
+}
+[data-darkreader-inline-border-top] {
+  border-top-color: var(--darkreader-inline-border-top) !important;
+}
+[data-darkreader-inline-boxshadow] {
+  box-shadow: var(--darkreader-inline-boxshadow) !important;
+}
+[data-darkreader-inline-color] {
+  color: var(--darkreader-inline-color) !important;
+}
+[data-darkreader-inline-fill] {
+  fill: var(--darkreader-inline-fill) !important;
+}
+[data-darkreader-inline-stroke] {
+  stroke: var(--darkreader-inline-stroke) !important;
+}
+[data-darkreader-inline-outline] {
+  outline-color: var(--darkreader-inline-outline) !important;
+}
+[data-darkreader-inline-stopcolor] {
+  stop-color: var(--darkreader-inline-stopcolor) !important;
+}
+[data-darkreader-inline-bg] {
+  background: var(--darkreader-inline-bg) !important;
+}
+[data-darkreader-inline-invert] {
+    filter: invert(100%) hue-rotate(180deg);
+}</style><style class="darkreader darkreader--variables" media="screen">:root {
+   --darkreader-neutral-background: #181a1b;
+   --darkreader-neutral-text: #e8e6e3;
+   --darkreader-selection-background: #004daa;
+   --darkreader-selection-text: #e8e6e3;
+}</style><style class="darkreader darkreader--root-vars" media="screen"></style><style class="darkreader darkreader--user-agent" media="screen">@layer {
+html {
+    background-color: #181a1b !important;
+}
+html {
+    color-scheme: dark !important;
+}
+iframe {
+    color-scheme: dark !important;
+}
+html, body {
+    background-color: #181a1b;
+}
+html, body {
+    border-color: #736b5e;
+    color: #e8e6e3;
+}
+a {
+    color: #3391ff;
+}
+table {
+    border-color: #545b5e;
+}
+mark {
+    color: #e8e6e3;
+}
+::placeholder {
+    color: #b2aba1;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: #404400 !important;
+    color: #e8e6e3 !important;
+}
+::selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}
+::-moz-selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}
+}</style>
+  
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>AVS: Projekt 2</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style><style class="darkreader darkreader--sync" media="screen"></style>
+  <link rel="stylesheet" href="./AVS_ Projekt 2_files/github.css"><style class="darkreader darkreader--sync" media="screen"></style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+<meta name="darkreader" content="03b3118960cc41eda9c85282691bd159"><style class="darkreader darkreader--override" media="screen">.vimvixen-hint {
+    background-color: #684b00 !important;
+    border-color: #9e7e00 !important;
+    color: #d7d4cf !important;
+}
+#vimvixen-console-frame {
+    color-scheme: light !important;
+}
+::placeholder {
+    opacity: 0.5 !important;
+}
+#edge-translate-panel-body,
+.MuiTypography-body1,
+.nfe-quote-text {
+    color: var(--darkreader-neutral-text) !important;
+}
+gr-main-header {
+    background-color: #1b4958 !important;
+}
+.tou-z65h9k,
+.tou-mignzq,
+.tou-1b6i2ox,
+.tou-lnqlqk {
+    background-color: var(--darkreader-neutral-background) !important;
+}
+.tou-75mvi {
+    background-color: #0f3a47 !important;
+}
+.tou-ta9e87,
+.tou-1w3fhi0,
+.tou-1b8t2us,
+.tou-py7lfi,
+.tou-1lpmd9d,
+.tou-1frrtv8,
+.tou-17ezmgn {
+    background-color: #1e2021 !important;
+}
+.tou-uknfeu {
+    background-color: #432c09 !important;
+}
+.tou-6i3zyv {
+    background-color: #245d70 !important;
+}
+div.mermaid-viewer-control-panel .btn {
+    background-color: var(--darkreader-neutral-background);
+    fill: var(--darkreader-neutral-text);
+}
+svg g rect.er {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g rect.er.entityBox {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g rect.er.attributeBoxOdd {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g rect.er.attributeBoxEven {
+    fill: var(--darkreader-selection-background);
+    fill-opacity: 0.8 !important;
+}
+svg rect.er.relationshipLabelBox {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g g.nodes rect,
+svg g g.nodes polygon {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g rect.task {
+    fill: var(--darkreader-selection-background) !important;
+}
+svg line.messageLine0,
+svg line.messageLine1 {
+    stroke: var(--darkreader-neutral-text) !important;
+}
+div.mermaid .actor {
+    fill: var(--darkreader-neutral-background) !important;
+}
+mitid-authenticators-code-app > .code-app-container {
+    background-color: white !important;
+    padding-top: 1rem;
+}
+iframe#unpaywall[src$="unpaywall.html"] {
+    color-scheme: light !important;
+}
+embed[type="application/pdf"][src="about:blank"] { filter: invert(100%) contrast(90%); }</style></head>
+<body data-new-gr-c-s-check-loaded="14.1216.0" data-gr-ext-installed="">
+<header id="title-block-header">
+<h1 class="title">AVS: Projekt 2</h1>
+</header>
+<h1 id="hodnocení-2.-projektu-avs">Hodnocení 2. projektu AVS</h1>
+<p>Milé studentky a studenti, dostali jste hodnocení vašeho projektu z
+předmětu AVS. Detailní rozpis naleznete v ISu v detailech termínu. V
+tomto dokumentu vás seznámím s hodnocením a nejčastějšími chybami.
+Projekt jako celek dopadl dobře a věřím, že jste si odzkoušeli různé
+přístupy k paralelizaci časově náročné úlohy a že vám to pomohlo k
+pochopení problematiky architektur výpočetních systémů.</p>
+<h2 id="testování">Testování</h2>
+<p>Až 7 bodů za projekt jste mohli získat za funkčnost projektu.
+Automaticky se hodnotila správnost a rychlost zpracování. Pro překlad a
+hodnocení byly použity následující příkazy využívající data a testovací
+skript, které jste měli k dispozici v zadání.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ml</span> Python matplotlib/3.5.2-foss-2022a</span>
+<span id="cb1-2"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ml</span> VTune</span>
+<span id="cb1-3"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ml</span> CMake/3.27.6-GCCcore-13.2.0 intel-compilers/2024.2.0</span>
+<span id="cb1-4"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> . </span>
+<span id="cb1-5"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span>
+<span id="cb1-6"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-6" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-7"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">./PMC</span> <span class="at">-b</span> ref <span class="at">-g</span> 128 ../data/bun_zipper_res4.pts <span class="at">--batch</span>   <span class="dt">\</span></span>
+<span id="cb1-8"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-8" aria-hidden="true" tabindex="-1"></a>      r4_reference.obj</span>
+<span id="cb1-9"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-9" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-10"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> method <span class="kw">in</span> <span class="st">"tree"</span> <span class="st">"loop"</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb1-11"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 5<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb1-12"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="ex">./PMC</span> <span class="at">-b</span> <span class="va">$method</span> <span class="at">-g</span> 128 <span class="at">-t</span> 18 ../data/bun_zipper_res4.pts <span class="dt">\</span></span>
+<span id="cb1-13"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">--batch</span> r4_<span class="va">$method</span>.obj</span>
+<span id="cb1-14"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">done</span></span>
+<span id="cb1-15"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-15" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-16"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">python3</span> ../scripts/check_output.py  r4_reference.obj r4_<span class="va">$method</span>.obj</span>
+<span id="cb1-17"><a href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
+<p>Pro úlohu 4.3 byl pak použit datový soubor
+<code>bun_zipper_res3.pts</code>.</p>
+<p>Hodnotila se správnost výstupu pro jednotlivé úkoly a pokud byl
+výstup správně, testovala se rychlost. Správnost je určena tak, že počet
+trojúhelníků odpovídá referenčnímu řešení a vzdálenost je menší než 2.
+Rychlost byla určena jako medián ze tří běhů. Histogram rychlosti
+zpracování všech funkčních projektů můžete vidět na následujícím obrázku
+a určit, kde se zhruba se svým řešením pohybujete vůči ostatním
+studentům. Zelenou dělící čárou je vyznačeno referenční řešení.
+Červenými čárami jsou vyznačeny meze pro body za rychlost. Ti, kteří
+byli rychlejší než čárkovaná hranice (a chyba byla menší než 0.01),
+mohli za daný úkol získat dalších 0.5 bonusových bodů. Toto bonusové
+ohodnocení platilo pouze pro ty, kteří nepoužili vektorizaci (která v
+tomto projektu nebyla zamýšlena). Ovšem i ti, kteří vektorizaci vhodně
+použili, získali body navíc. Můžete si však všimnout, že vektorizace
+vždy nepomáhala a efektivní prací s kritickými sekcemi se dalo dosáhnout
+kvalitního řešení. Bonusové body se přičítaly k celkovému hodnocení, do
+termínu <em>Bonusové body</em> se přidávaly pouze body nad rámec maxima
+z projektu.</p>
+<p>V následujícím grafu můžete vidět, jakých rychlostí pro jednotlivá
+zadání jste dosahovali. <img src="./AVS_ Projekt 2_files/proj2_time.png" alt="Rychlost implementace"></p>
+<h2 id="nejčastější-chyby">Nejčastější chyby</h2>
+<p>Výčet nejčastějších chyb najdete níže:</p>
+<h3 id="otázka-1.1-kterou-ze-smyček-viz-zadání-je-vhodnější-paralelizovat-a-co-způsobuje-neefektivitu-paralelizaci-té-druhé">Otázka
+1.1: Kterou ze smyček (viz zadání) je vhodnější paralelizovat a co
+způsobuje neefektivitu paralelizaci té druhé?</h3>
+<p>Občas chybělo vyjádření se k druhé části otázky. Zdrojem neefektivity
+pak byla režie spojená se správou vláken a malé množství práce.</p>
+<h3 id="otázka-1.3-jaké-plánování-rozdělení-práce-mezi-vlákna-jste-zvolili-a-proč-popište-na-jakých-datech-počet-vláken-velikost-problému-jste-k-závěrům-došli.">Otázka
+1.3: Jaké plánování (rozdělení práce mezi vlákna) jste zvolili a proč?
+Popište, na jakých datech (počet vláken, velikost problému) jste k
+závěrům došli.</h3>
+<p>U této otázky chybělo zdůvodnění a popis, na jakých datech jste k
+závěru došli.</p>
+<h3 id="otázka-2.2-jakou-hodnotu-cut-off-jste-zvolili-jaké-hodnoty-cut-off-jste-zkoušeli-na-jak-velkých-velikostech-problému-a-jakých-času-jste-dosáhli-odůvodněte-vaši-volbu.">Otázka
+2.2: Jakou hodnotu cut-off jste zvolili? Jaké hodnoty “cut-off” jste
+zkoušeli, na jak velkých velikostech problému a jakých času jste
+dosáhli? Odůvodněte vaši volbu.</h3>
+<p>I u této otázky občas chyběla odpověď na druhou část otázky. Tj.
+zkoumané hodnoty cut-off, velikost testovaného problému, dosažené
+časy.</p>
+<h3 id="otázka-3.1-stručně-zhodnoťte-efektivitu-vytvořených-řešení-na-základě-všech-odevzdaných-grafů-škálování.">Otázka
+3.1: Stručně zhodnoťte efektivitu vytvořených řešení (na základě VŠECH
+odevzdaných grafů ŠKÁLOVÁNÍ).</h3>
+<p>Odpověď na tuto otázku byla občas nedostačující (nevyjádřili ke všem
+třem grafům), vágní nebo chybná (protiřečili jste si oproti vlastním
+grafům a jiným tvrzením).</p>
+<h3 id="otázka-3.2-v-jakém-případě-v-závislosti-na-počtu-bodů-ve-vstupním-souboru-a-velikosti-mřížky-bude-vaše-řešení-1.-úlohy-neefektivní">Otázka
+3.2: V jakém případě (v závislosti na počtu bodů ve vstupním souboru a
+velikosti mřížky) bude vaše řešení 1. úlohy neefektivní?</h3>
+<p>Na tuto otázku byla chybná odpověď pouze zřídka. Chybou bylo
+nepopsání případu, který byl pozorovatelný z vašich grafů a tvrzení, že
+takový případ neexistuje. Párkrát se stalo, že jste se nevyjádřili k 1.
+úloze, tedy Loop. V takovém případě vám ale body nebo jejich část byla
+uznána v zavislosti na vaší odpovědi.</p>
+<h3 id="otázka-3.3-je-nebo-není-stromový-algoritmus-efektivnější-z-pohledu-slabého-škálování-vzhledem-ke-vstupu">Otázka
+3.3: Je (nebo není) stromový algoritmus efektivnější z pohledu slabého
+škálování vzhledem ke vstupu?</h3>
+<p>Až na výjimky nebo některé případy nebyl stromový algoritmus
+efektivnější z hlediska slabého škálování. Řada z vás odpovídala špatně,
+byť někteří z vás uvedli správnou odpověď v otázce 3.1. Pokud chyba
+nevycházela čistě z vaší nepozornosti, prostudujte si do zkoušky, jak
+mají vypadat grafy silného a slabého škálování :)</p>
+<h3 id="otázky-4.1-a-4.2-jaké-bylo-průměrné-využití-jader-pro-všechny-tři-implementace-pro-18-a-36-vláken">Otázky
+4.1 a 4.2: Jaké bylo průměrné využití jader pro všechny tři implementace
+pro 18 a 36 vláken?</h3>
+<p>Někteří z vás uvedli špatná čísla a nedodrželi formát. Odpověď nebyla
+v %.</p>
+<h2 id="reklamace-a-připomínky">Reklamace a připomínky</h2>
+<p>Reklamace proběhnou v pondělí 13. ledna 2025 od 13:00 do 15:00 (po
+prvním termínu zkoušky z AVS) v kanceláři L327.</p>
+
+
+<textarea id="BFI_DATA" style="width: 1px; height: 1px; display: none;"></textarea><title> </title><div id="WidgetFloaterPanels" translate="no" style="display: none; text-align: left; direction: ltr; visibility: hidden;" class="LTRStyle"> <div id="WidgetFloater" style="display: none" onmouseover="Microsoft.Translator.OnMouseOverFloater()" onmouseout="Microsoft.Translator.OnMouseOutFloater()"> <div id="WidgetLogoPanel"> <span id="WidgetTranslateWithSpan"><span>TRANSLATE with </span><img id="FloaterLogo"></span> <span id="WidgetCloseButton" title="Exit Translation" onclick="Microsoft.Translator.FloaterOnClose()">x</span></div> <div id="LanguageMenuPanel"> <div class="DDStyle_outer"><input name="LanguageMenu_svid" type="text" id="LanguageMenu_svid" style="display:none;" autocomplete="on" value="en" onclick="this.select()"> <input name="LanguageMenu_textid" type="text" id="LanguageMenu_textid" style="display:none;" autocomplete="on" onclick="this.select()"> <span onselectstart="return false" tabindex="0" class="DDStyle" id="__LanguageMenu_header" onclick="return LanguageMenu &amp;&amp; !LanguageMenu.Show(&#39;__LanguageMenu_popup&#39;, event);" onkeydown="return LanguageMenu &amp;&amp; !LanguageMenu.Show(&#39;__LanguageMenu_popup&#39;, event);">English</span> <div style="position:relative;text-align:left;left:0;"><div style="position:absolute;width:;left:0px;"><div class="DDStyle" style="display:none;" id="__LanguageMenu_popup"> <table id="LanguageMenu" border="0"> <tbody><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ar&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ar">Arabic</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;he&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#he">Hebrew</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;pl&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#pl">Polish</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;bg&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#bg">Bulgarian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;hi&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#hi">Hindi</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;pt&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#pt">Portuguese</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ca&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ca">Catalan</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;mww&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#mww">Hmong Daw</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ro&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ro">Romanian</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;zh-CHS&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#zh-CHS">Chinese Simplified</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;hu&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#hu">Hungarian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ru&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ru">Russian</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;zh-CHT&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#zh-CHT">Chinese Traditional</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;id&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#id">Indonesian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;sk&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#sk">Slovak</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;cs&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cs">Czech</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;it&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#it">Italian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;sl&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#sl">Slovenian</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;da&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#da">Danish</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ja&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ja">Japanese</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;es&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#es">Spanish</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;nl&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#nl">Dutch</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;tlh&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#tlh">Klingon</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;sv&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#sv">Swedish</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;en&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#en">English</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ko&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ko">Korean</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;th&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#th">Thai</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;et&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#et">Estonian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;lv&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#lv">Latvian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;tr&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#tr">Turkish</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;fi&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#fi">Finnish</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;lt&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#lt">Lithuanian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;uk&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#uk">Ukrainian</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;fr&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#fr">French</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ms&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ms">Malay</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ur&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ur">Urdu</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;de&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#de">German</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;mt&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#mt">Maltese</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;vi&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#vi">Vietnamese</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;el&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#el">Greek</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;no&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#no">Norwegian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;cy&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#cy">Welsh</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ht&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#ht">Haitian Creole</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;fa&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://www.fit.vut.cz/person/jarosmarta/public/avs/eval_proj02#fa">Persian</a></td><td></td> </tr> </tbody></table> <img alt="" style="height:7px;width:17px;border-width:0px;left:20px;"> </div></div></div></div> <script type="text/javascript"> var LanguageMenu; var LanguageMenu_keys=["ar","bg","ca","zh-CHS","zh-CHT","cs","da","nl","en","et","fi","fr","de","el","ht","he","hi","mww","hu","id","it","ja","tlh","ko","lv","lt","ms","mt","no","fa","pl","pt","ro","ru","sk","sl","es","sv","th","tr","uk","ur","vi","cy"]; var LanguageMenu_values=["Arabic","Bulgarian","Catalan","Chinese Simplified","Chinese Traditional","Czech","Danish","Dutch","English","Estonian","Finnish","French","German","Greek","Haitian Creole","Hebrew","Hindi","Hmong Daw","Hungarian","Indonesian","Italian","Japanese","Klingon","Korean","Latvian","Lithuanian","Malay","Maltese","Norwegian","Persian","Polish","Portuguese","Romanian","Russian","Slovak","Slovenian","Spanish","Swedish","Thai","Turkish","Ukrainian","Urdu","Vietnamese","Welsh"]; var LanguageMenu_callback=function(){ }; var LanguageMenu_popupid='__LanguageMenu_popup'; </script> </div> <div id="CTFLinksPanel"> <span id="ExternalLinksPanel"><a id="HelpLink" title="Help" target="_blank" href="https://go.microsoft.com/?linkid=9722454"> <img id="HelpImg"></a> <a id="EmbedLink" href="javascript:Microsoft.Translator.FloaterShowEmbed()" title="Get this widget for your own site"> <img id="EmbedImg"></a> <a id="ShareLink" title="Share translated page with friends" href="javascript:Microsoft.Translator.FloaterShowSharePanel()"> <img id="ShareImg"></a> </span> </div> <div id="FloaterProgressBar"> <span id="ProgressFill"></span> </div> </div> <div id="WidgetFloaterCollapsed" style="display: none" onmouseover="Microsoft.Translator.OnMouseOverFloater()"> <span>TRANSLATE with </span><img id="CollapsedLogoImg"></div> <div id="FloaterSharePanel" style="display: none"> <div id="ShareTextDiv"> <span id="ShareTextSpan"> COPY THE URL BELOW </span> </div> <div id="ShareTextboxDiv"> <input name="ShareTextbox" type="text" id="ShareTextbox" readonly="readonly" onclick="this.select()"> <!--a id="TwitterLink" title="Share on Twitter"> <img id="TwitterImg" /></a> <a-- id="FacebookLink" title="Share on Facebook"> <img id="FacebookImg" /></a--> <a id="EmailLink" title="Email this translation"> <img id="EmailImg"></a> </div> <div id="ShareFooter"> <span id="ShareHelpSpan"><a id="ShareHelpLink"> <img id="ShareHelpImg"></a></span> <span id="ShareBackSpan"><a id="ShareBack" href="javascript:Microsoft.Translator.FloaterOnShareBackClick()" title="Back To Translation"> Back</a></span> </div> <input name="EmailSubject" type="hidden" id="EmailSubject" value="Check out this page in {0} translated from {1}"> <input name="EmailBody" type="hidden" id="EmailBody" value="Translated: {0}%0d%0aOriginal: {1}%0d%0a%0d%0aAutomatic translation powered by Microsoft® Translator%0d%0ahttp://www.bing.com/translator?ref=MSTWidget"> <input type="hidden" id="ShareHelpText" value="This link allows visitors to launch this page and automatically translate it to {0}."> </div> <div id="FloaterEmbed" style="display: none"> <div id="EmbedTextDiv"> <span id="EmbedTextSpan">EMBED THE SNIPPET BELOW IN YOUR SITE</span> <a id="EmbedHelpLink" title="Copy this code and place it into your HTML."> <img id="EmbedHelpImg"></a> </div> <div id="EmbedTextboxDiv"> <input name="EmbedSnippetTextBox" type="text" id="EmbedSnippetTextBox" readonly="readonly" value="&lt;div id=&#39;MicrosoftTranslatorWidget&#39; class=&#39;Dark&#39; style=&#39;color:white;background-color:#555555&#39;&gt;&lt;/div&gt;&lt;script type=&#39;text/javascript&#39;&gt;setTimeout(function(){var s=document.createElement(&#39;script&#39;);s.type=&#39;text/javascript&#39;;s.charset=&#39;UTF-8&#39;;s.src=((location &amp;&amp; location.href &amp;&amp; location.href.indexOf(&#39;https&#39;) == 0)?&#39;https://ssl.microsofttranslator.com&#39;:&#39;http://www.microsofttranslator.com&#39;)+&#39;/ajax/v3/WidgetV3.ashx?siteData=ueOIGRSKkd965FeEGM5JtQ**&amp;ctf=true&amp;ui=true&amp;settings=manual&amp;from=en&#39;;var p=document.getElementsByTagName(&#39;head&#39;)[0]||document.documentElement;p.insertBefore(s,p.firstChild); },0);&lt;/script&gt;" onclick="this.select()"> </div> <div id="EmbedNoticeDiv"><span id="EmbedNoticeSpan">Enable collaborative features and customize widget: <a href="http://www.bing.com/widget/translator" target="_blank">Bing Webmaster Portal</a></span></div> <div id="EmbedFooterDiv"><span id="EmbedBackSpan"><a href="javascript:Microsoft.Translator.FloaterOnEmbedBackClick()" title="Back To Translation">Back</a></span></div> </div> <script type="text/javascript"> var intervalId = setInterval(function () { if (MtPopUpList) { LanguageMenu = new MtPopUpList(); var langMenu = document.getElementById(LanguageMenu_popupid); var origLangDiv = document.createElement("div"); origLangDiv.id = "OriginalLanguageDiv"; origLangDiv.innerHTML = "<span id='OriginalTextSpan'>ORIGINAL: </span><span id='OriginalLanguageSpan'></span>"; langMenu.appendChild(origLangDiv); LanguageMenu.Init('LanguageMenu', LanguageMenu_keys, LanguageMenu_values, LanguageMenu_callback, LanguageMenu_popupid); window["LanguageMenu"] = LanguageMenu; clearInterval(intervalId); } }, 1); </script> </div></body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style class="darkreader darkreader--inline" media="screen">[data-darkreader-inline-bgcolor] {
+  background-color: var(--darkreader-inline-bgcolor) !important;
+}
+[data-darkreader-inline-bgimage] {
+  background-image: var(--darkreader-inline-bgimage) !important;
+}
+[data-darkreader-inline-border] {
+  border-color: var(--darkreader-inline-border) !important;
+}
+[data-darkreader-inline-border-bottom] {
+  border-bottom-color: var(--darkreader-inline-border-bottom) !important;
+}
+[data-darkreader-inline-border-left] {
+  border-left-color: var(--darkreader-inline-border-left) !important;
+}
+[data-darkreader-inline-border-right] {
+  border-right-color: var(--darkreader-inline-border-right) !important;
+}
+[data-darkreader-inline-border-top] {
+  border-top-color: var(--darkreader-inline-border-top) !important;
+}
+[data-darkreader-inline-boxshadow] {
+  box-shadow: var(--darkreader-inline-boxshadow) !important;
+}
+[data-darkreader-inline-color] {
+  color: var(--darkreader-inline-color) !important;
+}
+[data-darkreader-inline-fill] {
+  fill: var(--darkreader-inline-fill) !important;
+}
+[data-darkreader-inline-stroke] {
+  stroke: var(--darkreader-inline-stroke) !important;
+}
+[data-darkreader-inline-outline] {
+  outline-color: var(--darkreader-inline-outline) !important;
+}
+[data-darkreader-inline-stopcolor] {
+  stop-color: var(--darkreader-inline-stopcolor) !important;
+}
+[data-darkreader-inline-bg] {
+  background: var(--darkreader-inline-bg) !important;
+}
+[data-darkreader-inline-invert] {
+    filter: invert(100%) hue-rotate(180deg);
+}</style><style class="darkreader darkreader--override" media="screen">.vimvixen-hint {
+    background-color: #684b00 !important;
+    border-color: #9e7e00 !important;
+    color: #d7d4cf !important;
+}
+#vimvixen-console-frame {
+    color-scheme: light !important;
+}
+::placeholder {
+    opacity: 0.5 !important;
+}
+#edge-translate-panel-body,
+.MuiTypography-body1,
+.nfe-quote-text {
+    color: var(--darkreader-neutral-text) !important;
+}
+gr-main-header {
+    background-color: #1b4958 !important;
+}
+.tou-z65h9k,
+.tou-mignzq,
+.tou-1b6i2ox,
+.tou-lnqlqk {
+    background-color: var(--darkreader-neutral-background) !important;
+}
+.tou-75mvi {
+    background-color: #0f3a47 !important;
+}
+.tou-ta9e87,
+.tou-1w3fhi0,
+.tou-1b8t2us,
+.tou-py7lfi,
+.tou-1lpmd9d,
+.tou-1frrtv8,
+.tou-17ezmgn {
+    background-color: #1e2021 !important;
+}
+.tou-uknfeu {
+    background-color: #432c09 !important;
+}
+.tou-6i3zyv {
+    background-color: #245d70 !important;
+}
+div.mermaid-viewer-control-panel .btn {
+    background-color: var(--darkreader-neutral-background);
+    fill: var(--darkreader-neutral-text);
+}
+svg g rect.er {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g rect.er.entityBox {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g rect.er.attributeBoxOdd {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g rect.er.attributeBoxEven {
+    fill: var(--darkreader-selection-background);
+    fill-opacity: 0.8 !important;
+}
+svg rect.er.relationshipLabelBox {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g g.nodes rect,
+svg g g.nodes polygon {
+    fill: var(--darkreader-neutral-background) !important;
+}
+svg g rect.task {
+    fill: var(--darkreader-selection-background) !important;
+}
+svg line.messageLine0,
+svg line.messageLine1 {
+    stroke: var(--darkreader-neutral-text) !important;
+}
+div.mermaid .actor {
+    fill: var(--darkreader-neutral-background) !important;
+}
+mitid-authenticators-code-app > .code-app-container {
+    background-color: white !important;
+    padding-top: 1rem;
+}
+iframe#unpaywall[src$="unpaywall.html"] {
+    color-scheme: light !important;
+}
+embed[type="application/pdf"][src="about:blank"] { filter: invert(100%) contrast(90%); }</style><style class="darkreader darkreader--invert" media="screen">.jfk-bubble.gtx-bubble, .captcheck_answer_label > input + img, span#closed_text > img[src^="https://www.gstatic.com/images/branding/googlelogo"], span[data-href^="https://www.hcaptcha.com/"] > #icon, img.Wirisformula {
+    filter: invert(100%) hue-rotate(180deg) contrast(90%) !important;
+}</style><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><style class="darkreader darkreader--sync" media="screen"></style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>

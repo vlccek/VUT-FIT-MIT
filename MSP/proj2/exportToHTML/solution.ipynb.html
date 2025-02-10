@@ -1,0 +1,572 @@
+<html>
+<head>
+<title>solution.ipynb</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+.ls0 { height: 1px; border-width: 0; color: #43454a; background-color:#43454a}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+solution.ipynb</font>
+</center></td></tr></table>
+<pre><span class="s0">#%% md 
+</span><span class="s1"># Weibullovo rozdělení 
+- Weibullovo rozdělení je definováno dvěma parametry: 
+ 
+Weibullovo rozdělení je definováno dvěma parametry: 
+- **Tvarový parametr** ($k$): Určuje tvar rozdělení. 
+  - $k &lt; 1$: Pravděpodobnost selhání časem klesá. 
+  - $k = 1$: Odpovídá exponenciálnímu rozdělení. 
+  - $k &gt; 1$: Pravděpodobnost selhání časem roste. 
+- **Měřítkový parametr** ($\lambda\$): Určuje škálu rozdělení (např. typickou délku života nebo čas do selhání). 
+ 
+Weibllovo rozdělení má hustotu pravděpodobnosti a distribuční funkci definovanou následovně: 
+$$ 
+f(t; \lambda, k) = \frac{k}{\lambda} \left( \frac{t}{\lambda} \right)^{k-1} e^{-(t / \lambda)^k} 
+$$ 
+Funkce přežití (SF) (pravděpodobnost přežití do času $S(t)$ je definována jako: 
+$$ 
+S(t; \lambda, k) = e^{-(t / \lambda)^k} 
+$$ <hr class="ls0"></span><span class="s0">#%% md 
+</span><span class="s1">## Výpočet logaritmické věrohodnostní funkce 
+ 
+Věrohodnostní funkce a logaritmická věrohodnostní funkce pro Weibullovo rozdělení jsou definovány následovně: 
+ 
+ 
+$$ 
+\mathcal{L}(k, \lambda) = \prod_{i} \left[ \frac{k}{\lambda} \left( \frac{x_i}{\lambda} \right)^{k-1} e^{-\left( \frac{x_i}{\lambda} \right)^k} \right] \prod_{j} \left[ e^{-\left( \frac{x_j}{\lambda} \right)^k} \right] 
+$$ 
+kde: 
+- Členy $\sum_i$ ($\prod_i$) zahrnují pouze pozorovaná selhání. 
+- Členy $\sum_j$ ($\prod_j$)zahrnují pouze pravostranně cenzurované body. <hr class="ls0"></span><span class="s0">#%% md 
+</span>
+<span class="s1">### Logaritmická věrohodnostní funkce pro Weibullovo rozdělení: 
+ 
+$$ 
+\ell(k, \lambda) = \sum_{i} \left[ \ln \frac{k}{\lambda} + (k - 1) \ln \frac{x_i}{\lambda} - \left( \frac{x_i}{\lambda} \right)^k \right] + \sum_{j} \left[ - \left( \frac{x_j}{\lambda} \right)^k \right] 
+$$ 
+$$ 
+\ell(k, \lambda) = n \ln(k) - n \ln(\lambda) + (k - 1) \sum_{i} \ln(x_i) - \sum_{i} \left( \frac{x_i}{\lambda} \right)^k - \sum_{j} \left( \frac{x_j}{\lambda} \right)^k 
+$$ 
+Výpočet logaritmické věrohodnostní funkce pro Weibullovo rozdělení: 
+ <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s2">import </span><span class="s1">pandas </span><span class="s2">as </span><span class="s1">pd</span>
+<span class="s2">import </span><span class="s1">sympy </span><span class="s2">as </span><span class="s1">sp</span>
+<span class="s2">from </span><span class="s1">mpmath</span><span class="s3">.</span><span class="s1">libmp</span><span class="s3">.</span><span class="s1">libmpf </span><span class="s2">import </span><span class="s1">negative_rnd</span>
+<span class="s2">from </span><span class="s1">scipy</span><span class="s3">.</span><span class="s1">ndimage </span><span class="s2">import </span><span class="s1">maximum</span>
+<span class="s2">from </span><span class="s1">sympy</span><span class="s3">.</span><span class="s1">integrals</span><span class="s3">.</span><span class="s1">meijerint_doc </span><span class="s2">import </span><span class="s1">formula</span>
+
+<span class="s0"># Načtení Excelového souboru</span>
+<span class="s1">file_path </span><span class="s3">= </span><span class="s4">&quot;Data_2024.xlsx&quot;</span>
+<span class="s1">sheet_name </span><span class="s3">= </span><span class="s4">&quot;Data_věrohodnost&quot;  </span><span class="s0"># Název listu, který chcete načíst</span>
+
+<span class="s0"># Načtení dat do DataFrame</span>
+<span class="s1">data </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">read_excel</span><span class="s3">(</span><span class="s1">file_path</span><span class="s3">, </span><span class="s1">sheet_name</span><span class="s3">=</span><span class="s1">sheet_name</span><span class="s3">, </span><span class="s1">usecols</span><span class="s3">=[</span><span class="s4">&quot;censored&quot;</span><span class="s3">, </span><span class="s4">&quot;doba práce v oboru [roky]&quot;</span><span class="s3">])</span>
+
+<span class="s0"># Přejmenování sloupců</span>
+<span class="s1">data</span><span class="s3">.</span><span class="s1">columns </span><span class="s3">= [</span><span class="s4">&quot;censored&quot;</span><span class="s3">, </span><span class="s4">&quot;time&quot;</span><span class="s3">]</span>
+
+<span class="s0"># Náhled na prvních několik řádků</span>
+<span class="s1">data</span><span class="s3">.</span><span class="s1">describe</span><span class="s3">()</span><hr class="ls0"><span class="s0">#%% md 
+</span>
+<span class="s1">## Nalezení minima logaritmické věrohodnostní funkce 
+Nyní je potřeba najít minimum pro nalezní MLE odhad parametrů $k$ a $\lambda$, což dělám tak že spočítám derivaci logaritmické věrohodnostní funkce a spočítám kdy je rovna 0. 
+\todo 
+### Derivace podle $k$ 
+$$ 
+\frac{\partial \ell}{\partial k} = \frac{n}{k} + \sum_{i} \ln(x_i) - \sum_{i} \left( \frac{x_i}{\lambda} \right)^k \ln\left( \frac{x_i}{\lambda} \right) - \sum_{j} \left( \frac{x_j}{\lambda} \right)^k \ln\left( \frac{x_j}{\lambda} \right) 
+$$ 
+ 
+ 
+### Derivace podle $\lambda$ 
+$$ 
+\frac{\partial \ell}{\partial \lambda} = -\frac{n}{\lambda} + k \sum_{i} \left( \frac{x_i}{\lambda} \right)^k \frac{1}{\lambda} + k \sum_{j} \left( \frac{x_j}{\lambda} \right)^k \frac{1}{\lambda} 
+$$ 
+ <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s2">import </span><span class="s1">pandas </span><span class="s2">as </span><span class="s1">pd</span>
+<span class="s2">import </span><span class="s1">numpy </span><span class="s2">as </span><span class="s1">np</span>
+<span class="s2">from </span><span class="s1">scipy</span><span class="s3">.</span><span class="s1">optimize </span><span class="s2">import </span><span class="s1">minimize</span>
+
+<span class="s1">failures </span><span class="s3">= </span><span class="s1">data</span><span class="s3">[</span><span class="s4">'time'</span><span class="s3">][</span><span class="s1">data</span><span class="s3">[</span><span class="s4">'censored'</span><span class="s3">] == </span><span class="s5">0</span><span class="s3">]</span>
+<span class="s1">censored_times </span><span class="s3">= </span><span class="s1">data</span><span class="s3">[</span><span class="s4">'time'</span><span class="s3">][</span><span class="s1">data</span><span class="s3">[</span><span class="s4">'censored'</span><span class="s3">] == </span><span class="s5">1</span><span class="s3">]</span>
+
+
+<span class="s0"># Log-likelihood function</span>
+<span class="s2">def </span><span class="s1">llf</span><span class="s3">(</span><span class="s1">n</span><span class="s3">, </span><span class="s1">k</span><span class="s3">, </span><span class="s1">lambd</span><span class="s3">, </span><span class="s1">x_values</span><span class="s3">, </span><span class="s1">y_values</span><span class="s3">):</span>
+    <span class="s1">term1 </span><span class="s3">= </span><span class="s1">n </span><span class="s3">* </span><span class="s1">np</span><span class="s3">.</span><span class="s1">log</span><span class="s3">(</span><span class="s1">k</span><span class="s3">)</span>
+    <span class="s1">term2 </span><span class="s3">= -</span><span class="s1">n </span><span class="s3">* </span><span class="s1">k </span><span class="s3">* </span><span class="s1">np</span><span class="s3">.</span><span class="s1">log</span><span class="s3">(</span><span class="s1">lambd</span><span class="s3">)</span>
+
+    <span class="s1">term3 </span><span class="s3">= (</span><span class="s1">k </span><span class="s3">- </span><span class="s5">1</span><span class="s3">) * </span><span class="s1">np</span><span class="s3">.</span><span class="s1">sum</span><span class="s3">(</span><span class="s1">np</span><span class="s3">.</span><span class="s1">log</span><span class="s3">(</span><span class="s1">x_values</span><span class="s3">))</span>
+
+    <span class="s1">term4 </span><span class="s3">= -</span><span class="s1">np</span><span class="s3">.</span><span class="s1">sum</span><span class="s3">((</span><span class="s1">x_values </span><span class="s3">/ </span><span class="s1">lambd</span><span class="s3">) ** </span><span class="s1">k</span><span class="s3">)</span>
+
+    <span class="s1">term5 </span><span class="s3">= -</span><span class="s1">np</span><span class="s3">.</span><span class="s1">sum</span><span class="s3">((</span><span class="s1">y_values </span><span class="s3">/ </span><span class="s1">lambd</span><span class="s3">) ** </span><span class="s1">k</span><span class="s3">)</span>
+    <span class="s2">return </span><span class="s1">term1 </span><span class="s3">+ </span><span class="s1">term2 </span><span class="s3">+ </span><span class="s1">term3 </span><span class="s3">+ </span><span class="s1">term4 </span><span class="s3">+ </span><span class="s1">term5</span>
+
+
+<span class="s0"># estimate initial parameters</span>
+<span class="s1">initial_params </span><span class="s3">= [</span><span class="s5">0.5</span><span class="s3">, </span><span class="s1">np</span><span class="s3">.</span><span class="s1">median</span><span class="s3">(</span><span class="s1">data</span><span class="s3">[</span><span class="s4">'time'</span><span class="s3">])]</span>
+
+<span class="s0"># Optimalizace</span>
+<span class="s1">result </span><span class="s3">= </span><span class="s1">minimize</span><span class="s3">(</span>
+    <span class="s1">fun</span><span class="s3">=</span><span class="s2">lambda </span><span class="s1">params</span><span class="s3">, </span><span class="s1">f</span><span class="s3">, </span><span class="s1">c</span><span class="s3">: -</span><span class="s1">llf</span><span class="s3">(</span><span class="s1">len</span><span class="s3">(</span><span class="s1">f</span><span class="s3">), </span><span class="s1">params</span><span class="s3">[</span><span class="s5">0</span><span class="s3">], </span><span class="s1">params</span><span class="s3">[</span><span class="s5">1</span><span class="s3">], </span><span class="s1">f</span><span class="s3">, </span><span class="s1">c</span><span class="s3">),</span>
+    <span class="s0"># minus bcs minimizing, f-failrues, c-censored, len(f)-n from the formula</span>
+    <span class="s1">x0</span><span class="s3">=</span><span class="s1">initial_params</span><span class="s3">,</span>
+    <span class="s1">args</span><span class="s3">=(</span><span class="s1">failures</span><span class="s3">, </span><span class="s1">censored_times</span><span class="s3">),</span>
+    <span class="s1">method</span><span class="s3">=</span><span class="s4">'L-BFGS-B'</span><span class="s3">,  </span><span class="s0"># from docs</span>
+    <span class="s1">bounds</span><span class="s3">=[(</span><span class="s5">0.001</span><span class="s3">, </span><span class="s2">None</span><span class="s3">), (</span><span class="s5">0.001</span><span class="s3">, </span><span class="s2">None</span><span class="s3">)]  </span><span class="s0"># Lower bounds for k and λ: k &gt; 0, λ &gt; 0</span>
+<span class="s3">)</span>
+
+<span class="s0"># Results:</span>
+<span class="s1">k_hat</span><span class="s3">, </span><span class="s1">lam_hat </span><span class="s3">= </span><span class="s1">result</span><span class="s3">.</span><span class="s1">x</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">&quot;MLE odhad parametrů pomocí scipy.optimize.minimize:&quot;</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">f&quot;Optimal shape parameter k: </span><span class="s2">{</span><span class="s1">k_hat</span><span class="s2">:</span><span class="s4">.3f</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">f&quot;Optimal scale parameter λ: </span><span class="s2">{</span><span class="s1">lam_hat</span><span class="s2">:</span><span class="s4">.3f</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s3">)</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1"># Je exponenciální rozdělení je postačujícím modelem zapsaných dat? 
+ <hr class="ls0"></span><span class="s0">#%% md 
+</span>
+
+<span class="s1">$$ 
+  H_0: \text{Model je exponenciální ($k=1$)}\quad 
+$$ 
+ 
+$$ 
+H_1: \text{Model je Weibullovo ($k \neq 1$, není exponenciální)} 
+$$ 
+ 
+## MLE pro exponenciální rozdělení 
+ 
+## Pro necenzurovaná data 
+$$ 
+L(\lambda) = \prod_{i=1}^n \lambda e^{-\lambda x_i} 
+$$ 
+ 
+$$ 
+\ell(\lambda) = \ln L(\lambda) = n \ln \lambda - \lambda \sum_{i=1}^n x_i 
+$$ 
+ 
+ 
+## Pro cenzurovaná data 
+ 
+$$ 
+L(\lambda) = \prod_{i=1}^n e^{-\lambda x_i} 
+$$ 
+ 
+$$ 
+\ell(\lambda) = \ln L(\lambda) = - \lambda \sum_{i=1}^n x_i 
+$$ 
+ 
+### Testována hypotéza 
+ 
+$$ 
+\Lambda = -2 \ln \left(\frac{L(H_0)}{L(H_1)}\right) = 2[\ln L(H_0) - \ln L(H_1)]. 
+$$ 
+ 
+$$ 
+   p = P(\chi^2(1) \geq \Lambda) = 1 - F_{\chi^2(1)}(\Lambda), 
+$$ 
+ <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s2">from </span><span class="s1">scipy</span><span class="s3">.</span><span class="s1">stats </span><span class="s2">import </span><span class="s1">chi2</span>
+
+
+<span class="s2">def </span><span class="s1">exponential_log_likelihood_censored</span><span class="s3">(</span><span class="s1">lambda_</span><span class="s3">, </span><span class="s1">censored</span><span class="s3">):</span>
+    <span class="s1">logL_censored </span><span class="s3">= -</span><span class="s1">lambda_ </span><span class="s3">* </span><span class="s1">np</span><span class="s3">.</span><span class="s1">sum</span><span class="s3">(</span><span class="s1">censored</span><span class="s3">)</span>
+
+    <span class="s2">return </span><span class="s1">logL_censored</span>
+
+
+<span class="s2">def </span><span class="s1">exponential_log_likelihood_failed</span><span class="s3">(</span><span class="s1">lambda_</span><span class="s3">, </span><span class="s1">f</span><span class="s3">):</span>
+    <span class="s1">logL_failures </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">sum</span><span class="s3">(</span><span class="s1">np</span><span class="s3">.</span><span class="s1">log</span><span class="s3">(</span><span class="s1">lambda_</span><span class="s3">) - </span><span class="s1">lambda_ </span><span class="s3">* </span><span class="s1">f</span><span class="s3">)</span>
+
+    <span class="s2">return </span><span class="s1">logL_failures</span>
+
+
+<span class="s2">def </span><span class="s1">exponential_log_likelihood</span><span class="s3">(</span><span class="s1">lambda_</span><span class="s3">, </span><span class="s1">f</span><span class="s3">, </span><span class="s1">c</span><span class="s3">):</span>
+    <span class="s2">return </span><span class="s3">-(</span><span class="s1">exponential_log_likelihood_failed</span><span class="s3">(</span><span class="s1">lambda_</span><span class="s3">, </span><span class="s1">f</span><span class="s3">) + </span><span class="s1">exponential_log_likelihood_censored</span><span class="s3">(</span><span class="s1">lambda_</span><span class="s3">, </span><span class="s1">c</span><span class="s3">))</span>
+
+
+<span class="s1">initial_params </span><span class="s3">= [</span><span class="s5">1.</span><span class="s3">]</span>
+
+<span class="s1">result </span><span class="s3">= </span><span class="s1">minimize</span><span class="s3">(</span><span class="s1">exponential_log_likelihood</span><span class="s3">,</span>
+                  <span class="s1">x0</span><span class="s3">=</span><span class="s1">initial_params</span><span class="s3">,</span>
+                  <span class="s1">args</span><span class="s3">=(</span><span class="s1">failures</span><span class="s3">, </span><span class="s1">censored_times</span><span class="s3">),</span>
+                  <span class="s1">method</span><span class="s3">=</span><span class="s4">'L-BFGS-B'</span><span class="s3">,  </span><span class="s0"># from docs</span>
+                  <span class="s1">bounds</span><span class="s3">=[(</span><span class="s5">0.001</span><span class="s3">, </span><span class="s2">None</span><span class="s3">)])</span>
+
+<span class="s1">lambda_head_exp_num_both </span><span class="s3">= </span><span class="s1">result</span><span class="s3">.</span><span class="s1">x</span><span class="s3">[</span><span class="s5">0</span><span class="s3">]</span>
+<span class="s0"># Results:</span>
+<span class="s1">ll_weibull </span><span class="s3">= </span><span class="s1">llf</span><span class="s3">(</span><span class="s1">len</span><span class="s3">(</span><span class="s1">failures</span><span class="s3">), </span><span class="s1">k_hat</span><span class="s3">, </span><span class="s1">lam_hat</span><span class="s3">, </span><span class="s1">failures</span><span class="s3">, </span><span class="s1">censored_times</span><span class="s3">)</span>
+<span class="s1">ll_exp </span><span class="s3">= -</span><span class="s1">exponential_log_likelihood</span><span class="s3">(</span><span class="s1">lambda_head_exp_num_both</span><span class="s3">, </span><span class="s1">failures</span><span class="s3">, </span><span class="s1">censored_times</span><span class="s3">)</span>
+
+<span class="s1">LR </span><span class="s3">= </span><span class="s5">2 </span><span class="s3">* (</span><span class="s1">ll_weibull </span><span class="s3">- </span><span class="s1">ll_exp</span><span class="s3">)</span>
+
+<span class="s4">f&quot;LR statistika: </span><span class="s2">{</span><span class="s1">LR</span><span class="s2">:</span><span class="s4">.3f</span><span class="s2">}</span><span class="s4">, kritická hodnota (alpha 0.05): </span><span class="s2">{</span><span class="s1">chi2</span><span class="s3">.</span><span class="s1">ppf</span><span class="s3">(</span><span class="s5">0.95</span><span class="s3">, </span><span class="s5">1</span><span class="s3">)</span><span class="s2">:</span><span class="s4">.3f</span><span class="s2">}</span><span class="s4">, LR &gt; 3.84: tedy zamítáme H0. Model není exponenciální.&quot;</span>
+<hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1"># Bodový odhady: 
+Vybrané body pro odhad 
+## Střední hodnota: 
+$$ 
+E[T] = \lambda \cdot \Gamma\left(1 + \frac{1}{k}\right) 
+$$ 
+ 
+## 10% Percentil: 
+$$ 
+P(T \leq t) = 0.1 
+$$ 
+Vyjdeme ze vztahu pro distribuční funkci: $S(t) = 1 - e^{-(t/\lambda)^k}$ a vyřešíme pro $t$: 
+ 
+$$ 
+t = \lambda \cdot (-\ln(1 - p))^{1/k} 
+$$ 
+$$ 
+t = 7.429 \cdot (-\ln(1 - 0.1))^{1/6.173} 
+$$ 
+ 
+$$ 
+t = 5.16 
+$$ 
+ 
+ <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s2">import </span><span class="s1">numpy </span><span class="s2">as </span><span class="s1">np</span>
+<span class="s2">from </span><span class="s1">scipy</span><span class="s3">.</span><span class="s1">special </span><span class="s2">import </span><span class="s1">gamma</span>
+
+<span class="s0"># Střední doba zaměstnání</span>
+<span class="s1">mean_weibull </span><span class="s3">= </span><span class="s1">lam_hat </span><span class="s3">* </span><span class="s1">gamma</span><span class="s3">(</span><span class="s5">1 </span><span class="s3">+ </span><span class="s5">1 </span><span class="s3">/ </span><span class="s1">k_hat</span><span class="s3">)</span>
+
+<span class="s0"># 10% percentil zaměstnání</span>
+<span class="s1">p </span><span class="s3">= </span><span class="s5">0.1</span>
+<span class="s1">percentile_weibull </span><span class="s3">= </span><span class="s1">lam_hat </span><span class="s3">* (-</span><span class="s1">np</span><span class="s3">.</span><span class="s1">log</span><span class="s3">(</span><span class="s5">1 </span><span class="s3">- </span><span class="s1">p</span><span class="s3">)) ** (</span><span class="s5">1 </span><span class="s3">/ </span><span class="s1">k_hat</span><span class="s3">)</span>
+
+<span class="s0"># Výsledky</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">f&quot;Střední doba (Weibull): </span><span class="s2">{</span><span class="s1">mean_weibull</span><span class="s2">:</span><span class="s4">.2f</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">f&quot;10% percentil (Weibull): </span><span class="s2">{</span><span class="s1">percentile_weibull</span><span class="s2">:</span><span class="s4">.2f</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s3">)</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">--- 
+ <hr class="ls0"></span><span class="s0">#%% md 
+</span><span class="s1"># Regrese 
+ 
+Načtení data přejmnování sloupců a náhled na data. <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s2">import </span><span class="s1">pandas </span><span class="s2">as </span><span class="s1">pd</span>
+<span class="s2">import </span><span class="s1">numpy </span><span class="s2">as </span><span class="s1">np</span>
+<span class="s2">import </span><span class="s1">statsmodels</span><span class="s3">.</span><span class="s1">formula</span><span class="s3">.</span><span class="s1">api </span><span class="s2">as </span><span class="s1">smf</span>
+<span class="s2">import </span><span class="s1">scipy</span><span class="s3">.</span><span class="s1">stats </span><span class="s2">as </span><span class="s1">stats</span>
+<span class="s2">import </span><span class="s1">matplotlib</span><span class="s3">.</span><span class="s1">pyplot </span><span class="s2">as </span><span class="s1">plt</span>
+<span class="s2">import </span><span class="s1">statsmodels</span><span class="s3">.</span><span class="s1">api </span><span class="s2">as </span><span class="s1">sm</span>
+<span class="s2">import </span><span class="s1">seaborn </span><span class="s2">as </span><span class="s1">sns</span>
+
+<span class="s2">from </span><span class="s1">statsmodels</span><span class="s3">.</span><span class="s1">stats</span><span class="s3">.</span><span class="s1">outliers_influence </span><span class="s2">import </span><span class="s1">variance_inflation_factor</span>
+<span class="s2">from </span><span class="s1">statsmodels</span><span class="s3">.</span><span class="s1">graphics</span><span class="s3">.</span><span class="s1">gofplots </span><span class="s2">import </span><span class="s1">qqplot</span>
+<span class="s2">from </span><span class="s1">matplotlib </span><span class="s2">import </span><span class="s1">cm</span>
+
+<span class="s0"># Načtení Excelového souboru</span>
+<span class="s1">file_path </span><span class="s3">= </span><span class="s4">&quot;Data_2024.xlsx&quot;</span>
+<span class="s1">sheet_name </span><span class="s3">= </span><span class="s4">&quot;Data_regrese&quot;  </span><span class="s0"># loaded list name</span>
+
+<span class="s0"># Loading to DataFrame</span>
+<span class="s1">df </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">read_excel</span><span class="s3">(</span><span class="s1">file_path</span><span class="s3">, </span><span class="s1">sheet_name</span><span class="s3">=</span><span class="s1">sheet_name</span><span class="s3">,</span>
+                     <span class="s1">usecols</span><span class="s3">=[</span><span class="s4">&quot;OSType&quot;</span><span class="s3">, </span><span class="s4">&quot;ActiveUsers&quot;</span><span class="s3">, </span><span class="s4">&quot;InteractingPct&quot;</span><span class="s3">, </span><span class="s4">&quot;ScrollingPct&quot;</span><span class="s3">, </span><span class="s4">&quot;Ping [ms]&quot;</span><span class="s3">])</span>
+
+<span class="s0"># renaming to more readable names</span>
+<span class="s1">df</span><span class="s3">.</span><span class="s1">columns </span><span class="s3">= [</span><span class="s4">&quot;os_type&quot;</span><span class="s3">, </span><span class="s4">&quot;active_users&quot;</span><span class="s3">, </span><span class="s4">&quot;interacting_pct&quot;</span><span class="s3">, </span><span class="s4">&quot;scrolling_pct&quot;</span><span class="s3">, </span><span class="s4">&quot;ping&quot;</span><span class="s3">]</span>
+
+<span class="s1">df_backup </span><span class="s3">= </span><span class="s1">df</span><span class="s3">.</span><span class="s1">copy</span><span class="s3">()</span>
+
+<span class="s0"># Quick look at the data</span>
+<span class="s1">df</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Vykrese grafů roložení dat a jejich vztahů pro lepší představu o datech. <hr class="ls0"></span><span class="s0">#%% 
+# Ploting of data to see the distribution and relationships directly</span>
+<span class="s1">pp </span><span class="s3">= </span><span class="s1">sns</span><span class="s3">.</span><span class="s1">pairplot</span><span class="s3">(</span><span class="s1">df</span><span class="s3">, </span><span class="s1">corner</span><span class="s3">=</span><span class="s2">True</span><span class="s3">, </span><span class="s1">plot_kws</span><span class="s3">={</span><span class="s4">&quot;s&quot;</span><span class="s3">: </span><span class="s5">10</span><span class="s3">})</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s2">import </span><span class="s1">statsmodels</span><span class="s3">.</span><span class="s1">formula</span><span class="s3">.</span><span class="s1">api </span><span class="s2">as </span><span class="s1">smf</span>
+
+
+<span class="s0"># Definition of simple linear regression model</span>
+<span class="s1">independent_vars </span><span class="s3">= </span><span class="s4">'+'</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s1">c </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">df</span><span class="s3">.</span><span class="s1">columns </span><span class="s2">if </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'ping'</span><span class="s3">])</span>
+<span class="s0"># ping dependent on every other parameter</span>
+<span class="s1">formula </span><span class="s3">= </span><span class="s4">f'ping ~ </span><span class="s2">{</span><span class="s1">independent_vars</span><span class="s2">}</span><span class="s4">'</span>
+
+<span class="s0"># Regresní model</span>
+<span class="s1">model </span><span class="s3">= </span><span class="s1">smf</span><span class="s3">.</span><span class="s1">ols</span><span class="s3">(</span><span class="s1">formula</span><span class="s3">=</span><span class="s1">formula</span><span class="s3">, </span><span class="s1">data</span><span class="s3">=</span><span class="s1">df</span><span class="s3">).</span><span class="s1">fit</span><span class="s3">()</span>
+
+<span class="s0"># Výstup modelu</span>
+<span class="s1">model</span><span class="s3">.</span><span class="s1">summary</span><span class="s3">()</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Z tabulky jde vidět že P hodnota sloupce scrolling_pct je větší jak 0.05, tak je možné tento sloupec odstranit. <hr class="ls0"></span><span class="s0">#%% 
+# Removing the column with high p-value</span>
+<span class="s1">df</span><span class="s3">.</span><span class="s1">drop</span><span class="s3">(</span><span class="s1">columns</span><span class="s3">=[</span><span class="s4">'scrolling_pct'</span><span class="s3">], </span><span class="s1">inplace</span><span class="s3">=</span><span class="s2">True</span><span class="s3">,</span><span class="s1">axis</span><span class="s3">=</span><span class="s5">1</span><span class="s3">)</span>
+
+<span class="s0"># Definition of simple linear regression model</span>
+<span class="s1">independent_vars </span><span class="s3">= </span><span class="s4">'+'</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s1">c </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">df</span><span class="s3">.</span><span class="s1">columns </span><span class="s2">if </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'ping'</span><span class="s3">])</span>
+<span class="s0"># ping dependent on every other parameter</span>
+<span class="s1">formula </span><span class="s3">= </span><span class="s4">f'ping ~ </span><span class="s2">{</span><span class="s1">independent_vars</span><span class="s2">}</span><span class="s4">'</span>
+
+<span class="s0"># Regresní model</span>
+<span class="s1">model </span><span class="s3">= </span><span class="s1">smf</span><span class="s3">.</span><span class="s1">ols</span><span class="s3">(</span><span class="s1">formula</span><span class="s3">=</span><span class="s1">formula</span><span class="s3">, </span><span class="s1">data</span><span class="s3">=</span><span class="s1">df</span><span class="s3">).</span><span class="s1">fit</span><span class="s3">()</span>
+<span class="s1">model</span><span class="s3">.</span><span class="s1">summary</span><span class="s3">()</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Nyní přejdu k plně kvadratickému modelu. <hr class="ls0"></span><span class="s0">#%% 
+# Adding basic terms</span>
+<span class="s1">columns_without_ping </span><span class="s3">= [</span><span class="s1">c </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">df</span><span class="s3">.</span><span class="s1">columns </span><span class="s2">if </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'ping'</span><span class="s3">]</span>
+
+<span class="s1">independent_vars </span><span class="s3">= </span><span class="s4">'+'</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s1">c </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">columns_without_ping</span><span class="s3">])</span>
+<span class="s1">independent_vars </span><span class="s3">+= </span><span class="s4">&quot;+&quot;</span>
+<span class="s0"># Adding quadratic terms</span>
+<span class="s1">independent_vars </span><span class="s3">+= </span><span class="s4">'+'</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s4">f'</span><span class="s2">{</span><span class="s1">c</span><span class="s2">} </span><span class="s4">+ I(</span><span class="s2">{</span><span class="s1">c</span><span class="s2">}</span><span class="s4">**2)' </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">columns_without_ping </span><span class="s2">if </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'os_type'</span><span class="s3">])</span>
+<span class="s1">independent_vars </span><span class="s3">+= </span><span class="s4">&quot;+&quot;</span>
+<span class="s0"># Adding interaction terms double for each pair</span>
+<span class="s1">independent_vars </span><span class="s3">+= </span><span class="s4">&quot;+&quot;</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s4">f'</span><span class="s2">{</span><span class="s1">c</span><span class="s2">}</span><span class="s4">:</span><span class="s2">{</span><span class="s1">c2</span><span class="s2">}</span><span class="s4">' </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">columns_without_ping </span><span class="s2">for </span><span class="s1">c2 </span><span class="s2">in </span><span class="s1">columns_without_ping </span><span class="s3">])</span>
+
+
+<span class="s0"># ping dependent on every other parameter</span>
+<span class="s1">formula </span><span class="s3">= </span><span class="s4">f'ping ~ </span><span class="s2">{</span><span class="s1">independent_vars</span><span class="s2">}</span><span class="s4">'</span>
+
+<span class="s0"># Regresní model</span>
+<span class="s1">model </span><span class="s3">= </span><span class="s1">smf</span><span class="s3">.</span><span class="s1">ols</span><span class="s3">(</span><span class="s1">formula</span><span class="s3">=</span><span class="s1">formula</span><span class="s3">, </span><span class="s1">data</span><span class="s3">=</span><span class="s1">df</span><span class="s3">).</span><span class="s1">fit</span><span class="s3">()</span>
+<span class="s1">model</span><span class="s3">.</span><span class="s1">summary</span><span class="s3">()</span><hr class="ls0"><span class="s0">#%% 
+# shamefully stolen from practice</span>
+
+<span class="s1">X </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">DataFrame</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">model</span><span class="s3">.</span><span class="s1">exog</span><span class="s3">, </span><span class="s1">columns</span><span class="s3">=</span><span class="s1">model</span><span class="s3">.</span><span class="s1">model</span><span class="s3">.</span><span class="s1">exog_names</span><span class="s3">)</span>
+<span class="s1">vif </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">Series</span><span class="s3">([</span><span class="s1">variance_inflation_factor</span><span class="s3">(</span><span class="s1">X</span><span class="s3">.</span><span class="s1">values</span><span class="s3">, </span><span class="s1">i</span><span class="s3">)</span>
+                 <span class="s2">for </span><span class="s1">i </span><span class="s2">in </span><span class="s1">range</span><span class="s3">(</span><span class="s1">X</span><span class="s3">.</span><span class="s1">shape</span><span class="s3">[</span><span class="s5">1</span><span class="s3">])],</span>
+                 <span class="s1">index</span><span class="s3">=</span><span class="s1">X</span><span class="s3">.</span><span class="s1">columns</span><span class="s3">)</span>
+<span class="s1">vif_df </span><span class="s3">= </span><span class="s1">vif</span><span class="s3">.</span><span class="s1">to_frame</span><span class="s3">()</span>
+<span class="s0"># Nastavení názvu sloupce</span>
+<span class="s1">vif_df</span><span class="s3">.</span><span class="s1">columns </span><span class="s3">= [</span><span class="s4">'VIF'</span><span class="s3">]</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">vif_df</span><span class="s3">)</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Hodnoty větší jak 10 mohu indikovat vysokou korealitu. Standardizuji je teda pomocí z-score. Zde by bylo asi fajn podotknout to, že pokud by se do modelu přidávali další data, tak je potřeba nová data taktéř normalizovat. <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s2">from </span><span class="s1">sklearn</span><span class="s3">.</span><span class="s1">preprocessing </span><span class="s2">import </span><span class="s1">StandardScaler</span>
+<span class="s1">scaler </span><span class="s3">= </span><span class="s1">StandardScaler</span><span class="s3">()</span>
+<span class="s1">df</span><span class="s3">[</span><span class="s4">'active_users'</span><span class="s3">] = </span><span class="s1">scaler</span><span class="s3">.</span><span class="s1">fit_transform</span><span class="s3">(</span><span class="s1">df</span><span class="s3">[[</span><span class="s4">'active_users'</span><span class="s3">]])</span>
+<span class="s1">df</span><span class="s3">[</span><span class="s4">'interacting_pct'</span><span class="s3">] = </span><span class="s1">scaler</span><span class="s3">.</span><span class="s1">fit_transform</span><span class="s3">(</span><span class="s1">df</span><span class="s3">[[</span><span class="s4">'interacting_pct'</span><span class="s3">]])</span>
+
+<span class="s0"># formula is still the same</span>
+<span class="s1">model </span><span class="s3">= </span><span class="s1">smf</span><span class="s3">.</span><span class="s1">ols</span><span class="s3">(</span><span class="s1">formula</span><span class="s3">=</span><span class="s1">formula</span><span class="s3">, </span><span class="s1">data</span><span class="s3">=</span><span class="s1">df</span><span class="s3">).</span><span class="s1">fit</span><span class="s3">()</span>
+
+<span class="s1">X </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">DataFrame</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">model</span><span class="s3">.</span><span class="s1">exog</span><span class="s3">, </span><span class="s1">columns</span><span class="s3">=</span><span class="s1">model</span><span class="s3">.</span><span class="s1">model</span><span class="s3">.</span><span class="s1">exog_names</span><span class="s3">)</span>
+<span class="s1">vif </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">Series</span><span class="s3">([</span><span class="s1">variance_inflation_factor</span><span class="s3">(</span><span class="s1">X</span><span class="s3">.</span><span class="s1">values</span><span class="s3">, </span><span class="s1">i</span><span class="s3">)</span>
+                 <span class="s2">for </span><span class="s1">i </span><span class="s2">in </span><span class="s1">range</span><span class="s3">(</span><span class="s1">X</span><span class="s3">.</span><span class="s1">shape</span><span class="s3">[</span><span class="s5">1</span><span class="s3">])],</span>
+                 <span class="s1">index</span><span class="s3">=</span><span class="s1">X</span><span class="s3">.</span><span class="s1">columns</span><span class="s3">)</span>
+<span class="s1">vif_df </span><span class="s3">= </span><span class="s1">vif</span><span class="s3">.</span><span class="s1">to_frame</span><span class="s3">()</span>
+<span class="s0"># Nastavení názvu sloupce</span>
+<span class="s1">vif_df</span><span class="s3">.</span><span class="s1">columns </span><span class="s3">= [</span><span class="s4">'VIF'</span><span class="s3">]</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">'</span><span class="s2">\n\n\n</span><span class="s4">'</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">vif_df</span><span class="s3">)</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Jak je vidno výše, normalizace výšše zmíněných data pomohla dostat hodnoty VIF pod 10. <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s1">model</span><span class="s3">.</span><span class="s1">summary</span><span class="s3">()</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Ze detailu ohled modelu jde vidět, že některé hodnoty mají vysokou p hodnotu. Tyto hodnoty jsem eliminoval. 
+ <hr class="ls0"></span><span class="s0">#%% 
+# Removing columns with high p-value</span>
+
+<span class="s0"># Adding basic terms</span>
+<span class="s1">columns_without_ping </span><span class="s3">= [</span><span class="s1">c </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">df</span><span class="s3">.</span><span class="s1">columns </span><span class="s2">if </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'ping'</span><span class="s3">]</span>
+
+<span class="s1">independent_vars </span><span class="s3">= </span><span class="s4">'+'</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s1">c </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">columns_without_ping</span><span class="s3">])</span>
+<span class="s1">independent_vars </span><span class="s3">+= </span><span class="s4">&quot;+&quot;</span>
+<span class="s0"># Adding quadratic terms</span>
+<span class="s1">independent_vars </span><span class="s3">+= </span><span class="s4">'+'</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s4">f'</span><span class="s2">{</span><span class="s1">c</span><span class="s2">} </span><span class="s4">+ I(</span><span class="s2">{</span><span class="s1">c</span><span class="s2">}</span><span class="s4">**2)' </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">columns_without_ping </span><span class="s2">if </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'os_type' </span><span class="s2">and </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'interacting_pct'</span><span class="s3">])</span>
+<span class="s1">independent_vars </span><span class="s3">+= </span><span class="s4">&quot;+&quot;</span>
+<span class="s0"># Adding interaction terms double for each pair</span>
+
+<span class="s0"># please dont judge me for this</span>
+<span class="s1">columns_without_inter </span><span class="s3">= [</span><span class="s1">c </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">columns_without_ping </span><span class="s2">if </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'interacting_pct'</span><span class="s3">]</span>
+<span class="s1">columns_without_inter_ostype </span><span class="s3">= [</span><span class="s1">c </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">columns_without_inter </span><span class="s2">if </span><span class="s1">c </span><span class="s3">!= </span><span class="s4">'os_type'</span><span class="s3">]</span>
+<span class="s1">independent_vars </span><span class="s3">+= </span><span class="s4">&quot;+&quot;</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s4">f'</span><span class="s2">{</span><span class="s1">c</span><span class="s2">}</span><span class="s4">:</span><span class="s2">{</span><span class="s1">c2</span><span class="s2">}</span><span class="s4">' </span><span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">columns_without_ping </span><span class="s2">for </span><span class="s1">c2 </span><span class="s2">in </span><span class="s1">columns_without_inter_ostype</span><span class="s3">])</span>
+
+<span class="s0"># ping dependent on every other parameter</span>
+<span class="s1">formula </span><span class="s3">= </span><span class="s4">f'ping ~ </span><span class="s2">{</span><span class="s1">independent_vars</span><span class="s2">}</span><span class="s4">'</span>
+
+
+<span class="s1">X </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">DataFrame</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">model</span><span class="s3">.</span><span class="s1">exog</span><span class="s3">, </span><span class="s1">columns</span><span class="s3">=</span><span class="s1">model</span><span class="s3">.</span><span class="s1">model</span><span class="s3">.</span><span class="s1">exog_names</span><span class="s3">)</span>
+<span class="s1">vif </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">Series</span><span class="s3">([</span><span class="s1">variance_inflation_factor</span><span class="s3">(</span><span class="s1">X</span><span class="s3">.</span><span class="s1">values</span><span class="s3">, </span><span class="s1">i</span><span class="s3">)</span>
+                 <span class="s2">for </span><span class="s1">i </span><span class="s2">in </span><span class="s1">range</span><span class="s3">(</span><span class="s1">X</span><span class="s3">.</span><span class="s1">shape</span><span class="s3">[</span><span class="s5">1</span><span class="s3">])],</span>
+                 <span class="s1">index</span><span class="s3">=</span><span class="s1">X</span><span class="s3">.</span><span class="s1">columns</span><span class="s3">)</span>
+<span class="s1">vif_df </span><span class="s3">= </span><span class="s1">vif</span><span class="s3">.</span><span class="s1">to_frame</span><span class="s3">()</span>
+<span class="s0"># Nastavení názvu sloupce</span>
+<span class="s1">vif_df</span><span class="s3">.</span><span class="s1">columns </span><span class="s3">= [</span><span class="s4">'VIF'</span><span class="s3">]</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">'</span><span class="s2">\n\n\n</span><span class="s4">'</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">vif_df</span><span class="s3">)</span>
+
+<span class="s0"># Regresní model</span>
+<span class="s1">model </span><span class="s3">= </span><span class="s1">smf</span><span class="s3">.</span><span class="s1">ols</span><span class="s3">(</span><span class="s1">formula</span><span class="s3">=</span><span class="s1">formula</span><span class="s3">, </span><span class="s1">data</span><span class="s3">=</span><span class="s1">df</span><span class="s3">).</span><span class="s1">fit</span><span class="s3">()</span>
+<span class="s1">model</span><span class="s3">.</span><span class="s1">summary</span><span class="s3">()</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Hodnoty p jsou již všechny pod 0.05, což znamená že v modelu jsou pouze statisticky významné hodnoty. Nyní ještě do modelu vrátím původní hodnoty. <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s1">df</span><span class="s3">[</span><span class="s4">'active_users'</span><span class="s3">] = </span><span class="s1">df_backup</span><span class="s3">[</span><span class="s4">'active_users'</span><span class="s3">]</span>
+<span class="s1">df</span><span class="s3">[</span><span class="s4">'interacting_pct'</span><span class="s3">] = </span><span class="s1">df_backup</span><span class="s3">[</span><span class="s4">'interacting_pct'</span><span class="s3">]</span>
+
+<span class="s0"># Regresní model</span>
+<span class="s1">model </span><span class="s3">= </span><span class="s1">smf</span><span class="s3">.</span><span class="s1">ols</span><span class="s3">(</span><span class="s1">formula</span><span class="s3">=</span><span class="s1">formula</span><span class="s3">, </span><span class="s1">data</span><span class="s3">=</span><span class="s1">df</span><span class="s3">).</span><span class="s1">fit</span><span class="s3">()</span>
+<span class="s1">model</span><span class="s3">.</span><span class="s1">summary</span><span class="s3">()</span><hr class="ls0"><span class="s0">#%% 
+</span>
+<span class="s0"># Outliers detection</span>
+<span class="s1">influence </span><span class="s3">= </span><span class="s1">model</span><span class="s3">.</span><span class="s1">get_influence</span><span class="s3">()</span>
+<span class="s1">outl_stats_df </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">DataFrame</span><span class="s3">({</span>
+    <span class="s4">'Standardized Residuals'</span><span class="s3">: </span><span class="s1">influence</span><span class="s3">.</span><span class="s1">resid_studentized_internal</span><span class="s3">,</span>
+<span class="s3">}, </span><span class="s1">index</span><span class="s3">=</span><span class="s1">df</span><span class="s3">.</span><span class="s1">index</span><span class="s3">)</span>
+<span class="s1">outl_stats_df </span><span class="s3">= </span><span class="s1">outl_stats_df</span><span class="s3">[(</span><span class="s1">np</span><span class="s3">.</span><span class="s1">abs</span><span class="s3">(</span><span class="s1">outl_stats_df</span><span class="s3">[</span><span class="s4">'Standardized Residuals'</span><span class="s3">]) &gt; </span><span class="s5">5</span><span class="s3">)]</span>
+
+<span class="s1">print</span><span class="s3">(</span><span class="s1">outl_stats_df</span><span class="s3">)</span>
+
+<span class="s1">index </span><span class="s3">= </span><span class="s1">outl_stats_df</span><span class="s3">.</span><span class="s1">index </span><span class="s0"># [255, 476]</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Výše uvedený kód detekuje outliery. Používá se k tomu metrika resid_studentized_internal, která označuje standardizované reziduum (chybu) každého bodu, přičemž se zohledňuje jeho vliv na model. Hodnoty s větším číslem považuju za outliery. Výše uvedený kód detekuje dva outliery, které jsou na indexech 255 a 476. Nyní se podívám na grafy, které mi pomohou zjistit, zda jsou tyto body opravdu outliery. <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s1">fig</span><span class="s3">, ((</span><span class="s1">ax1</span><span class="s3">, </span><span class="s1">ax2</span><span class="s3">), (</span><span class="s1">ax3</span><span class="s3">, </span><span class="s1">ax4</span><span class="s3">)) = </span><span class="s1">plt</span><span class="s3">.</span><span class="s1">subplots</span><span class="s3">(</span><span class="s5">2</span><span class="s3">, </span><span class="s5">2</span><span class="s3">, </span><span class="s1">figsize</span><span class="s3">=(</span><span class="s5">12</span><span class="s3">,</span><span class="s5">12</span><span class="s3">))</span>
+
+<span class="s0"># Vykreslení histogramu reziduí - pro málo pozorování moc nedává smysl</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">hist</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">, </span><span class="s1">bins</span><span class="s3">=</span><span class="s4">'auto'</span><span class="s3">, </span><span class="s1">density</span><span class="s3">=</span><span class="s2">True</span><span class="s3">, </span><span class="s1">alpha</span><span class="s3">=</span><span class="s5">0.6</span><span class="s3">, </span><span class="s1">color</span><span class="s3">=</span><span class="s4">'g'</span><span class="s3">)</span>
+
+
+<span class="s0"># Vykreslení odpovídající Gaussovy křivky</span>
+<span class="s1">xmin</span><span class="s3">, </span><span class="s1">xmax</span><span class="s3">, </span><span class="s1">_</span><span class="s3">, </span><span class="s1">_ </span><span class="s3">= </span><span class="s1">ax1</span><span class="s3">.</span><span class="s1">axis</span><span class="s3">()</span>
+<span class="s1">x </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">linspace</span><span class="s3">(</span><span class="s1">xmin</span><span class="s3">, </span><span class="s1">xmax</span><span class="s3">, </span><span class="s5">100</span><span class="s3">)</span>
+<span class="s1">p </span><span class="s3">= </span><span class="s1">stats</span><span class="s3">.</span><span class="s1">norm</span><span class="s3">.</span><span class="s1">pdf</span><span class="s3">(</span><span class="s1">x</span><span class="s3">, </span><span class="s1">np</span><span class="s3">.</span><span class="s1">mean</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">), </span><span class="s1">np</span><span class="s3">.</span><span class="s1">std</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">))</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">plot</span><span class="s3">(</span><span class="s1">x</span><span class="s3">, </span><span class="s1">p</span><span class="s3">, </span><span class="s4">'k'</span><span class="s3">, </span><span class="s1">linewidth</span><span class="s3">=</span><span class="s5">2</span><span class="s3">)</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">grid</span><span class="s3">(</span><span class="s2">True</span><span class="s3">)</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s4">&quot;Histogram reziduí&quot;</span><span class="s3">)</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">set_xlabel</span><span class="s3">(</span><span class="s4">&quot;Rezidua&quot;</span><span class="s3">)</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">set_ylabel</span><span class="s3">(</span><span class="s4">&quot;Hustota&quot;</span><span class="s3">)</span>
+
+
+<span class="s0">#q-q plot</span>
+<span class="s1">qqplot</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">, </span><span class="s1">ax</span><span class="s3">=</span><span class="s1">ax2</span><span class="s3">)</span>
+<span class="s1">ax2</span><span class="s3">.</span><span class="s1">scatter</span><span class="s3">([</span><span class="s5">2.65</span><span class="s3">,</span><span class="s5">2.88</span><span class="s3">], </span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">[[</span><span class="s5">255</span><span class="s3">, </span><span class="s5">476</span><span class="s3">]], </span><span class="s1">color</span><span class="s3">=</span><span class="s4">'red'</span><span class="s3">, </span><span class="s1">zorder</span><span class="s3">=</span><span class="s5">5</span><span class="s3">) </span><span class="s0"># psst, shame on me...</span>
+<span class="s1">ax2</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s4">'Q-Q graf'</span><span class="s3">)</span>
+<span class="s1">ax2</span><span class="s3">.</span><span class="s1">grid</span><span class="s3">(</span><span class="s2">True</span><span class="s3">)</span>
+
+<span class="s0">#res vs fit</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">scatter</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">fittedvalues</span><span class="s3">, </span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">scatter</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">fittedvalues</span><span class="s3">[</span><span class="s1">index</span><span class="s3">], </span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">[</span><span class="s1">index</span><span class="s3">], </span><span class="s1">color</span><span class="s3">=</span><span class="s4">'r'</span><span class="s3">, </span><span class="s1">s</span><span class="s3">=</span><span class="s5">60</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">grid</span><span class="s3">(</span><span class="s2">True</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">set_xlabel</span><span class="s3">(</span><span class="s4">'Predikované hodnoty'</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">set_ylabel</span><span class="s3">(</span><span class="s4">'Rezidua'</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s4">'Rezidua vs Predikované hodnoty'</span><span class="s3">)</span>
+
+<span class="s0"># res vs order</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">scatter</span><span class="s3">(</span><span class="s1">range</span><span class="s3">(</span><span class="s1">len</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">)), </span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">, </span><span class="s1">alpha</span><span class="s3">=</span><span class="s5">0.5</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">grid</span><span class="s3">(</span><span class="s2">True</span><span class="s3">)</span>
+<span class="s1">plt</span><span class="s3">.</span><span class="s1">scatter</span><span class="s3">(</span><span class="s1">index</span><span class="s3">, </span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">[</span><span class="s1">index</span><span class="s3">], </span><span class="s1">color</span><span class="s3">=</span><span class="s4">'r'</span><span class="s3">, </span><span class="s1">s</span><span class="s3">=</span><span class="s5">60</span><span class="s3">)</span>
+<span class="s1">plt</span><span class="s3">.</span><span class="s1">savefig</span><span class="s3">(</span><span class="s4">&quot;residuals.png&quot;</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s4">&quot;Rezidua vs Pořadí&quot;</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">set_xlabel</span><span class="s3">(</span><span class="s4">&quot;Pořadí&quot;</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">set_ylabel</span><span class="s3">(</span><span class="s4">&quot;Rezidua&quot;</span><span class="s3">)</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">I když jsem skoro nespal tak lze jen těžko pochybovat, že by v body vybrané výše nebyli outliery a že bych je odstranil neprávem. Body tedy odstraním a zkontrololuju zda jsem odstranil správné body. Výsledek je **Diagnostika** modelu. Hodnoty jsou uvěřitelné, ale přišliš komplikují tvorbu dobrého modelu <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s1">df </span><span class="s3">= </span><span class="s1">df</span><span class="s3">.</span><span class="s1">drop</span><span class="s3">(</span><span class="s1">index</span><span class="s3">)</span>
+
+<span class="s1">model </span><span class="s3">= </span><span class="s1">smf</span><span class="s3">.</span><span class="s1">ols</span><span class="s3">(</span><span class="s1">formula</span><span class="s3">=</span><span class="s1">formula</span><span class="s3">, </span><span class="s1">data</span><span class="s3">=</span><span class="s1">df</span><span class="s3">).</span><span class="s1">fit</span><span class="s3">()</span>
+
+<span class="s1">fig</span><span class="s3">, ((</span><span class="s1">ax1</span><span class="s3">, </span><span class="s1">ax2</span><span class="s3">), (</span><span class="s1">ax3</span><span class="s3">, </span><span class="s1">ax4</span><span class="s3">)) = </span><span class="s1">plt</span><span class="s3">.</span><span class="s1">subplots</span><span class="s3">(</span><span class="s5">2</span><span class="s3">, </span><span class="s5">2</span><span class="s3">, </span><span class="s1">figsize</span><span class="s3">=(</span><span class="s5">12</span><span class="s3">,</span><span class="s5">12</span><span class="s3">))</span>
+
+<span class="s0"># Vykreslení histogramu reziduí - pro málo pozorování moc nedává smysl</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">hist</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">, </span><span class="s1">bins</span><span class="s3">=</span><span class="s4">'auto'</span><span class="s3">, </span><span class="s1">density</span><span class="s3">=</span><span class="s2">True</span><span class="s3">, </span><span class="s1">alpha</span><span class="s3">=</span><span class="s5">0.6</span><span class="s3">, </span><span class="s1">color</span><span class="s3">=</span><span class="s4">'g'</span><span class="s3">)</span>
+
+
+<span class="s0"># Vykreslení odpovídající Gaussovy křivky</span>
+<span class="s1">xmin</span><span class="s3">, </span><span class="s1">xmax</span><span class="s3">, </span><span class="s1">_</span><span class="s3">, </span><span class="s1">_ </span><span class="s3">= </span><span class="s1">ax1</span><span class="s3">.</span><span class="s1">axis</span><span class="s3">()</span>
+<span class="s1">x </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">linspace</span><span class="s3">(</span><span class="s1">xmin</span><span class="s3">, </span><span class="s1">xmax</span><span class="s3">, </span><span class="s5">100</span><span class="s3">)</span>
+<span class="s1">p </span><span class="s3">= </span><span class="s1">stats</span><span class="s3">.</span><span class="s1">norm</span><span class="s3">.</span><span class="s1">pdf</span><span class="s3">(</span><span class="s1">x</span><span class="s3">, </span><span class="s1">np</span><span class="s3">.</span><span class="s1">mean</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">), </span><span class="s1">np</span><span class="s3">.</span><span class="s1">std</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">))</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">plot</span><span class="s3">(</span><span class="s1">x</span><span class="s3">, </span><span class="s1">p</span><span class="s3">, </span><span class="s4">'k'</span><span class="s3">, </span><span class="s1">linewidth</span><span class="s3">=</span><span class="s5">2</span><span class="s3">)</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">grid</span><span class="s3">(</span><span class="s2">True</span><span class="s3">)</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s4">&quot;Histogram reziduí&quot;</span><span class="s3">)</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">set_xlabel</span><span class="s3">(</span><span class="s4">&quot;Rezidua&quot;</span><span class="s3">)</span>
+<span class="s1">ax1</span><span class="s3">.</span><span class="s1">set_ylabel</span><span class="s3">(</span><span class="s4">&quot;Hustota&quot;</span><span class="s3">)</span>
+
+
+<span class="s0">#q-q plot</span>
+<span class="s1">qqplot</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">, </span><span class="s1">ax</span><span class="s3">=</span><span class="s1">ax2</span><span class="s3">,   </span><span class="s1">line</span><span class="s3">=</span><span class="s4">'s'</span><span class="s3">, </span><span class="s1">linewidth</span><span class="s3">=</span><span class="s5">2</span><span class="s3">)</span>
+<span class="s1">ax2</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s4">'Q-Q graf'</span><span class="s3">)</span>
+<span class="s1">ax2</span><span class="s3">.</span><span class="s1">grid</span><span class="s3">(</span><span class="s2">True</span><span class="s3">)</span>
+
+<span class="s0">#res vs fit</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">scatter</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">fittedvalues</span><span class="s3">, </span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">axhline</span><span class="s3">(</span><span class="s1">y</span><span class="s3">=</span><span class="s5">0</span><span class="s3">, </span><span class="s1">color</span><span class="s3">=</span><span class="s4">'r'</span><span class="s3">, </span><span class="s1">linestyle</span><span class="s3">=</span><span class="s4">'-'</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">grid</span><span class="s3">(</span><span class="s2">True</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">set_xlabel</span><span class="s3">(</span><span class="s4">'Predikované hodnoty'</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">set_ylabel</span><span class="s3">(</span><span class="s4">'Rezidua'</span><span class="s3">)</span>
+<span class="s1">ax3</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s4">'Rezidua vs Predikované hodnoty'</span><span class="s3">)</span>
+
+<span class="s0"># res vs order</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">scatter</span><span class="s3">(</span><span class="s1">range</span><span class="s3">(</span><span class="s1">len</span><span class="s3">(</span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">)), </span><span class="s1">model</span><span class="s3">.</span><span class="s1">resid</span><span class="s3">, </span><span class="s1">alpha</span><span class="s3">=</span><span class="s5">0.5</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">axhline</span><span class="s3">(</span><span class="s1">y</span><span class="s3">=</span><span class="s5">0</span><span class="s3">, </span><span class="s1">color</span><span class="s3">=</span><span class="s4">'r'</span><span class="s3">, </span><span class="s1">linestyle</span><span class="s3">=</span><span class="s4">'-'</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">grid</span><span class="s3">(</span><span class="s2">True</span><span class="s3">)</span>
+<span class="s1">plt</span><span class="s3">.</span><span class="s1">savefig</span><span class="s3">(</span><span class="s4">&quot;residuals.png&quot;</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s4">&quot;Rezidua vs Pořadí&quot;</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">set_xlabel</span><span class="s3">(</span><span class="s4">&quot;Pořadí&quot;</span><span class="s3">)</span>
+<span class="s1">ax4</span><span class="s3">.</span><span class="s1">set_ylabel</span><span class="s3">(</span><span class="s4">&quot;Rezidua&quot;</span><span class="s3">)</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s1">model</span><span class="s3">.</span><span class="s1">summary</span><span class="s3">()</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">**Diagnostik** 
+R-squared (R²): 0.877 - Vysvětluje 87,7 % variability závislé proměnné ping, což naznačuje velmi dobré přizpůsobení datům. 
+Adj. R-squared: 0.875 - Korekce na počet prediktorů je minimální, což naznačuje, že přidání proměnných bylo relevantní. 
+F-statistic: 349.9 (p-hodnota &lt; 1.28e-215) - Model jako celek je statisticky signifikantní. 
+ 
+*Normální rozdělení reziduí:* 
+- Omnibus test: 0.661 (p = 0.719) 
+- Jarque-Bera (JB): 0.750 (p = 0.687) 
+    - Obě testové statistiky naznačují, že rezidua nemají významné odchylky od normálního rozdělení. 
+- Skew (Šikmost): 0.014 
+- Kurtosis (Špičatost): 2.812 
+- Rezidua jsou lehce špičatá, ale v mezích normálního rozdělení. 
+ 
+ 
+Tímto považuju model za hotový. Zjevně odstranění outlierů pomohlo modelu. Výsledný model je statisticky významný a všechny hodnoty jsou pod 0.05 (Při normalizovaných datech!). Denormalizaci jsem provedl abych nemusel na to myslet později. 
+ 
+P-hodnota není vždy jediným ukazatelem kvality modelu, zvláště pokud máme malý vzorek nebo když je důležitější praktická významnost a robustnost modelu než striktní dodržování prahu 0.05. Pokud model dobře funguje po odstranění outlierů a poskytuje smysluplné predikce(jak bude vidno níže), p-hodnoty nad 0.05 nemusí být klíčové pro jeho validitu. 
+ <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s1">coefficients </span><span class="s3">= </span><span class="s1">model</span><span class="s3">.</span><span class="s1">params</span>
+
+<span class="s0"># crafting the equation</span>
+<span class="s1">equation </span><span class="s3">= </span><span class="s4">&quot;y = &quot;</span>
+<span class="s1">equation </span><span class="s3">+= </span><span class="s4">&quot; + &quot;</span><span class="s3">.</span><span class="s1">join</span><span class="s3">([</span><span class="s4">f&quot;</span><span class="s2">{</span><span class="s1">coef</span><span class="s2">:</span><span class="s4">.4f</span><span class="s2">}</span><span class="s4">*</span><span class="s2">{</span><span class="s1">var</span><span class="s2">}</span><span class="s4">&quot; </span><span class="s2">if </span><span class="s1">var </span><span class="s3">!= </span><span class="s4">&quot;Intercept&quot; </span><span class="s2">else </span><span class="s4">f&quot;</span><span class="s2">{</span><span class="s1">coef</span><span class="s2">:</span><span class="s4">.4f</span><span class="s2">}</span><span class="s4">&quot; </span><span class="s2">for </span><span class="s1">var</span><span class="s3">, </span><span class="s1">coef </span><span class="s2">in </span><span class="s1">coefficients</span><span class="s3">.</span><span class="s1">items</span><span class="s3">()])</span>
+
+<span class="s1">print</span><span class="s3">(</span><span class="s1">equation</span><span class="s3">)</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Vzniklý model lze vidět ve výpisu předešlého bloku. <hr class="ls0"></span><span class="s0">#%% 
+</span><span class="s1">predictions </span><span class="s3">= </span><span class="s1">model</span><span class="s3">.</span><span class="s1">predict</span><span class="s3">(</span><span class="s1">df</span><span class="s3">)</span>
+
+<span class="s1">df</span><span class="s3">[</span><span class="s4">'Predicted'</span><span class="s3">] = </span><span class="s1">predictions</span>
+
+<span class="s1">max_pred </span><span class="s3">= </span><span class="s1">df</span><span class="s3">.</span><span class="s1">loc</span><span class="s3">[</span><span class="s1">df</span><span class="s3">[</span><span class="s4">'Predicted'</span><span class="s3">].</span><span class="s1">idxmax</span><span class="s3">()]</span>
+
+<span class="s1">print</span><span class="s3">(</span><span class="s4">&quot;Nastavení parametrů s nejvyšší predikovanou hodnotou:&quot;</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">max_pred</span><span class="s3">)</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s1">avg_values </span><span class="s3">= </span><span class="s1">df</span><span class="s3">[</span><span class="s1">df</span><span class="s3">[</span><span class="s4">'os_type'</span><span class="s3">] == </span><span class="s4">&quot;Windows&quot;</span><span class="s3">].</span><span class="s1">drop</span><span class="s3">(</span><span class="s4">'os_type'</span><span class="s3">, </span><span class="s1">axis</span><span class="s3">=</span><span class="s5">1</span><span class="s3">).</span><span class="s1">mean</span><span class="s3">()</span>
+<span class="s1">df</span><span class="s3">.</span><span class="s1">columns </span><span class="s3">= [</span><span class="s4">&quot;os_type&quot;</span><span class="s3">, </span><span class="s4">&quot;active_users&quot;</span><span class="s3">, </span><span class="s4">&quot;interacting_pct&quot;</span><span class="s3">, </span><span class="s4">&quot;scrolling_pct&quot;</span><span class="s3">, </span><span class="s4">&quot;ping&quot;</span><span class="s3">]</span>
+
+
+<span class="s1">tmp_df_mean </span><span class="s3">= </span><span class="s1">pd</span><span class="s3">.</span><span class="s1">DataFrame</span><span class="s3">({ </span><span class="s0"># docasny dataframe do ktereho nakrmim sve prumerne hodnoty</span>
+    <span class="s4">'active_users'</span><span class="s3">: [</span><span class="s1">avg_values</span><span class="s3">[</span><span class="s4">'active_users'</span><span class="s3">]],</span>
+    <span class="s4">'interacting_pct'</span><span class="s3">: [</span><span class="s1">avg_values</span><span class="s3">[</span><span class="s4">'interacting_pct'</span><span class="s3">]],</span>
+    <span class="s4">'scrolling_pct'</span><span class="s3">: [</span><span class="s1">avg_values</span><span class="s3">[</span><span class="s4">'scrolling_pct'</span><span class="s3">]],</span>
+    <span class="s4">'os_type'</span><span class="s3">: </span><span class="s4">&quot;Windows&quot;</span>
+<span class="s3">})</span>
+
+
+<span class="s0"># Prediction of the ping for the average Windows user (with 95% confidence interval)</span>
+<span class="s1">predicted_windows </span><span class="s3">= </span><span class="s1">model</span><span class="s3">.</span><span class="s1">get_prediction</span><span class="s3">(</span><span class="s1">tmp_df_mean</span><span class="s3">).</span><span class="s1">summary_frame</span><span class="s3">(</span><span class="s5">1</span><span class="s3">-</span><span class="s5">0.95</span><span class="s3">)</span>
+
+
+<span class="s1">confidence_interval_lower </span><span class="s3">= </span><span class="s1">predicted_windows</span><span class="s3">.</span><span class="s1">iloc</span><span class="s3">[</span><span class="s5">0</span><span class="s3">][</span><span class="s4">'mean_ci_lower'</span><span class="s3">]</span>
+<span class="s1">confidence_interval_upper </span><span class="s3">= </span><span class="s1">predicted_windows</span><span class="s3">.</span><span class="s1">iloc</span><span class="s3">[</span><span class="s5">0</span><span class="s3">][</span><span class="s4">'mean_ci_upper'</span><span class="s3">]</span>
+
+<span class="s1">prediction_interval_lower </span><span class="s3">= </span><span class="s1">predicted_windows</span><span class="s3">.</span><span class="s1">iloc</span><span class="s3">[</span><span class="s5">0</span><span class="s3">][</span><span class="s4">'obs_ci_lower'</span><span class="s3">]</span>
+<span class="s1">prediction_interval_upper </span><span class="s3">= </span><span class="s1">predicted_windows</span><span class="s3">.</span><span class="s1">iloc</span><span class="s3">[</span><span class="s5">0</span><span class="s3">][</span><span class="s4">'obs_ci_upper'</span><span class="s3">]</span>
+
+<span class="s1">print</span><span class="s3">(</span><span class="s4">&quot;Konfidečníni interval se spolehlivosti 95%: &lt;&quot; </span><span class="s3">+ </span><span class="s1">str</span><span class="s3">(</span><span class="s1">confidence_interval_lower</span><span class="s3">)</span><span class="s1">\</span>
+      <span class="s3">+ </span><span class="s4">&quot;, &quot; </span><span class="s3">+ </span><span class="s1">str</span><span class="s3">(</span><span class="s1">confidence_interval_upper</span><span class="s3">) + </span><span class="s4">&quot;&gt;&quot;</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">&quot;Predikcni interval se spolehlivosti 95%: &lt;&quot; </span><span class="s3">+ </span><span class="s1">str</span><span class="s3">(</span><span class="s1">prediction_interval_lower</span><span class="s3">)</span><span class="s1">\</span>
+      <span class="s3">+ </span><span class="s4">&quot;, &quot; </span><span class="s3">+ </span><span class="s1">str</span><span class="s3">(</span><span class="s1">prediction_interval_upper</span><span class="s3">) + </span><span class="s4">&quot;&gt;&quot;</span><span class="s3">)</span>
+
+<span class="s1">print</span><span class="s3">(</span><span class="s4">&quot;Predikovany ping: &quot; </span><span class="s3">+ </span><span class="s1">str</span><span class="s3">(</span><span class="s1">predicted_windows</span><span class="s3">.</span><span class="s1">iloc</span><span class="s3">[</span><span class="s5">0</span><span class="s3">][</span><span class="s4">'mean'</span><span class="s3">]))</span><hr class="ls0"><span class="s0">#%% md 
+</span><span class="s1">Výpočet hodnoty odezvy uživatele s Windows, při průměrném nastavení ostatních spolu s výpočtem parametrů a vypočtětem konfidenčního intervalu a predikčního interval pro toto nastavení. Je realizován tak že je vytvořen df. pro požadované hodnoty (průměrné hodnoty pro Windows) a následně je použit model.get_prediction() pro výpočet intervalů a hodnoty. 
+ <hr class="ls0"></span><span class="s0">#%% md 
+</span><span class="s1"># Závěr: 
+Vyrobený model se zdá že je schopný uvěřitelně předpovídat hodnoty. Problém modelu je, ale to, že nemáme moc hodnot. Lze se na to dívat statisticky a to sice tak, že to není dostatek hodnot na kvalitní predikce. Hodilo by se mi dostatek dat na vytvoření více modelů z části dat a následně porovnání jejich výsledků, tedy podobný princip jako v ML kde se data rozdělí na trénovací a testovací data (a případně validační). 
+ 
+Pokud se podíváme na `model.summary()` tak můžeme videt `R-squared: 0.87` což znamená že model vysvětluje ~88% variability dat. To je dobrý výsledek, vzhledem k tomu, že máme jen 500 hodnot. 
+ 
+Ačkoliv je příklad náhodný a nemusí dávat smysl tak by se asi hodilo i uvážit to, že jakožto konkurence twitteru nebo facebooku by jsme chtěli miliony uživatelů. Protože by jsem rádiu testovali co se stane s odevzvou při milionech užitevatelů a i více . 
+ <hr class="ls0"></span><span class="s0">#%% 
+</span></pre>
+</body>
+</html>

@@ -1,0 +1,67 @@
+#### Stručně ale věcně odpovězte na následující otázky: ######
+
+1. Jaká byla dosažena výkonnost v Intel Advisoru pro implementace ref, line a batch
+(v GFLOPS)? (0.5b)
+==============================================================================
+Vzhledem k tomu, že není řečeno o jaké výkonosti se jedná, tak zde uvádím všechny
+
+Nejvnitřnější smyčka:
+REF 0.629 GFLOPS
+LINE 33.365 GFLOPS
+BATCH 32.175 GFLOPS
+
+Vnější smyčka:
+REF 0.629 GFLOPS
+LINE 5.034 GFLOPS
+BATCH 10.068 GFLOPS
+
+Celý program:
+REF 2.69 GFLOPS
+LINE 7.47 GFLOPS
+BATCH 7.51 GFLOPS
+
+
+2. Porovnejte implementaci referenčního rešení oproti "Line" a "Batch" implementaci. 
+Jakým způsobem jsou načítána data, proč, a jaký to má vliv na výkon. (1b)
+==============================================================================
+V ref implementaci se postupuje poli po jednom a hodnoty se taktéž počítají po jednom. To má za následek
+velmi pomalou implementaci ať už z důvodu cache tak už zůdovu nevyužítí vektorových instrukcí.
+Jedinou výhodou této implementace je snad jen čitelnost a přímočarost.
+
+Line implementace pracuje s daty po 16 v rámci jednoho vektorového slova. Tato implementace je rychlejší než ref,
+ale stále je bržděna cachi.
+
+Batch implementace je stejná pouze jako line. Mění se pouze pořadí ve kterém se hodnoty počítají. Data se načítají více
+přátelsky ke cachi a tím pádem se snižuje počet přístupů do paměti.
+
+3. Porovnejte Roofline všech modelů. Jsou implementace memory 
+bound? Jaká je vaše aritmetická intenzita? Dokázali byste ji přibližně spočítat 
+i ručně a jak? (1b)
+==============================================================================
+U LINE implementace neni pochyb o tom, že je memory bound. Vzhledem k tomu. V batch implementaci jsem tomu značně pomohl
+ale nejspíš by se stále dalo docílit lepších výsledků. Refereční implementace je jak memory bound tak compute bound.
+
+Aritmetická intenzita lze spočítat jako počet operací děleno počtem data se kterými se manipuluje. Roofline je přímo
+ukazuje aritmetickou intenzitu.
+
+Vnitřní smyčka:
+ Pracuje se 512bity nad floaty tedy 16 a počet operací je 9. Dále je otázka jak počítát přiřazení ale dejme tomu, že se
+ jedná o registrobé operace. 16/9 je 1.77. Tedy aritmetická intenzita je 1.77.
+
+Roofline ukazuje:
+1.764 GFLOPS což je velmi blízko odhadu. 
+
+
+4. Komentujte vliv velikosti cache na výkonnost a chování na větších 
+velikostech domény. (1b)
+==============================================================================
+Vzhledem k tomu, že cache je omezená, tak se větší velikostí domény zvyšuje pravděpodobnost, že se data nevejdou do cache
+a tím pádem se zvýší počet přístupů do paměti. To má za následek snížení výkonu. Nejlepší pro jakoukkoliv implementaci je,
+aby data byla pouze v cache nejnižší (myšleno nejrychlejší) úrovně.
+
+
+5. Jaký vliv na výkonnost má symetrie? Lze tento rozdíl pozorovat v Intel Advisor? 
+(nápověda: instrukce) (0.5b)
+============================================================================== 
+Jedním slovem obrovský. Vzhledem k tomu, že stačí počátat polovinu obrázku tak lze říct, že výkon je téměr dvojnásobný.
+Je vykonána jen polovina instrukcí.

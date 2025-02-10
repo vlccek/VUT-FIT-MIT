@@ -1,0 +1,107 @@
+Text zprávy:
+================================================================================
+## Vektorizace po radcich
++1.00 b: spravnost vystupu: (error = 0.007%) (max 1 b)
++0.00 b: cas 1625 ms do limitu 1300 ms (a spravny vystup) (max 1 b) <-- !!!
+Reseni se umistilo mezi 75.00% nejrychlejsimi resenimi
+
+
+## Vektorizace po blocich
++1.00 b: spravnost vystupu: (error = 0.004%) (max 1 b)
++1.00 b: cas 400 ms do limitu 420 ms (a spravny vystup) (max 1 b)
++1.00 b: cas 400 ms do limitu 580 ms (a spravny vystup) (max 1 b)
++1.00 b: cas 400 ms do limitu 930 ms (a spravny vystup) (max 1 b)
+Reseni se umistilo mezi 18.03% nejrychlejsimi resenimi
+
+## Odpovedi, implementace a grafy
++0.00 b: Ukoncovaci smycka (Q1) (max 1 b) <-- !!!
++0.00 b: Neefektivita line (Q2) (max 1 b) <-- !!!
++0.00 b: Analyza v Intel Tools (Q3,Q4,Q5) (max 1 b) <-- !!!
++1.00 b: Graf evaluace (max 1 b)
+Celkem ziskano: 6.0 bodu
+
+Komentar
+================================================================================
+
+
+
+Log kompilace (stdout)
+================================================================================
+-- The C compiler identification is Intel 2021.6.0.20220226
+-- The CXX compiler identification is Intel 2021.6.0.20220226
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icpc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ZLIB: /apps/all/zlib/1.2.12-GCCcore-11.3.0/lib/libz.so (found version "1.2.12")
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat
+/apps/all/CMake/3.23.1-GCCcore-11.3.0/bin/cmake -S/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat -B/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat --check-build-system CMakeFiles/Makefile.cmake 0
+/apps/all/CMake/3.23.1-GCCcore-11.3.0/bin/cmake -E cmake_progress_start /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/CMakeFiles /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat//CMakeFiles/progress.marks
+make -f CMakeFiles/Makefile2 all
+make[1]: Entering directory '/scratch/project/dd-23-135/eval-proj01-new/xplagiat'
+make -f CMakeFiles/mandelbrot.dir/build.make CMakeFiles/mandelbrot.dir/depend
+make[2]: Entering directory '/scratch/project/dd-23-135/eval-proj01-new/xplagiat'
+cd /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat && /apps/all/CMake/3.23.1-GCCcore-11.3.0/bin/cmake -E cmake_depends "Unix Makefiles" /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/CMakeFiles/mandelbrot.dir/DependInfo.cmake --color=
+make[2]: Leaving directory '/scratch/project/dd-23-135/eval-proj01-new/xplagiat'
+make -f CMakeFiles/mandelbrot.dir/build.make CMakeFiles/mandelbrot.dir/build
+make[2]: Entering directory '/scratch/project/dd-23-135/eval-proj01-new/xplagiat'
+[ 14%] Building CXX object CMakeFiles/mandelbrot.dir/calculators/BaseMandelCalculator.cc.o
+/apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icpc -I/apps/all/zlib/1.2.12-GCCcore-11.3.0/include -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/common -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators -O3 -mavx2 -xHost -g -qopenmp-simd -qopt-report=1 -qopt-report-phase=vec -std=gnu++11 -MD -MT CMakeFiles/mandelbrot.dir/calculators/BaseMandelCalculator.cc.o -MF CMakeFiles/mandelbrot.dir/calculators/BaseMandelCalculator.cc.o.d -o CMakeFiles/mandelbrot.dir/calculators/BaseMandelCalculator.cc.o -c /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators/BaseMandelCalculator.cc
+[ 28%] Building CXX object CMakeFiles/mandelbrot.dir/calculators/BatchMandelCalculator.cc.o
+/apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icpc -I/apps/all/zlib/1.2.12-GCCcore-11.3.0/include -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/common -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators -O3 -mavx2 -xHost -g -qopenmp-simd -qopt-report=1 -qopt-report-phase=vec -std=gnu++11 -MD -MT CMakeFiles/mandelbrot.dir/calculators/BatchMandelCalculator.cc.o -MF CMakeFiles/mandelbrot.dir/calculators/BatchMandelCalculator.cc.o.d -o CMakeFiles/mandelbrot.dir/calculators/BatchMandelCalculator.cc.o -c /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators/BatchMandelCalculator.cc
+[ 42%] Building CXX object CMakeFiles/mandelbrot.dir/calculators/LineMandelCalculator.cc.o
+/apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icpc -I/apps/all/zlib/1.2.12-GCCcore-11.3.0/include -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/common -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators -O3 -mavx2 -xHost -g -qopenmp-simd -qopt-report=1 -qopt-report-phase=vec -std=gnu++11 -MD -MT CMakeFiles/mandelbrot.dir/calculators/LineMandelCalculator.cc.o -MF CMakeFiles/mandelbrot.dir/calculators/LineMandelCalculator.cc.o.d -o CMakeFiles/mandelbrot.dir/calculators/LineMandelCalculator.cc.o -c /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators/LineMandelCalculator.cc
+[ 57%] Building CXX object CMakeFiles/mandelbrot.dir/calculators/RefMandelCalculator.cc.o
+/apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icpc -I/apps/all/zlib/1.2.12-GCCcore-11.3.0/include -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/common -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators -O3 -mavx2 -xHost -g -qopenmp-simd -qopt-report=1 -qopt-report-phase=vec -std=gnu++11 -MD -MT CMakeFiles/mandelbrot.dir/calculators/RefMandelCalculator.cc.o -MF CMakeFiles/mandelbrot.dir/calculators/RefMandelCalculator.cc.o.d -o CMakeFiles/mandelbrot.dir/calculators/RefMandelCalculator.cc.o -c /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators/RefMandelCalculator.cc
+[ 71%] Building CXX object CMakeFiles/mandelbrot.dir/common/cnpy.cc.o
+/apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icpc -I/apps/all/zlib/1.2.12-GCCcore-11.3.0/include -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/common -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators -O3 -mavx2 -xHost -g -qopenmp-simd -qopt-report=1 -qopt-report-phase=vec -std=gnu++11 -MD -MT CMakeFiles/mandelbrot.dir/common/cnpy.cc.o -MF CMakeFiles/mandelbrot.dir/common/cnpy.cc.o.d -o CMakeFiles/mandelbrot.dir/common/cnpy.cc.o -c /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/common/cnpy.cc
+[ 85%] Building CXX object CMakeFiles/mandelbrot.dir/main.cc.o
+/apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icpc -I/apps/all/zlib/1.2.12-GCCcore-11.3.0/include -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/common -I/home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/calculators -O3 -mavx2 -xHost -g -qopenmp-simd -qopt-report=1 -qopt-report-phase=vec -std=gnu++11 -MD -MT CMakeFiles/mandelbrot.dir/main.cc.o -MF CMakeFiles/mandelbrot.dir/main.cc.o.d -o CMakeFiles/mandelbrot.dir/main.cc.o -c /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/main.cc
+[100%] Linking CXX executable mandelbrot
+/apps/all/CMake/3.23.1-GCCcore-11.3.0/bin/cmake -E cmake_link_script CMakeFiles/mandelbrot.dir/link.txt --verbose=1
+/apps/all/intel-compilers/2022.1.0/compiler/2022.1.0/linux/bin/intel64/icpc -O3 -mavx2 -xHost -g -qopenmp-simd -qopt-report=1 -qopt-report-phase=vec CMakeFiles/mandelbrot.dir/calculators/BaseMandelCalculator.cc.o CMakeFiles/mandelbrot.dir/calculators/BatchMandelCalculator.cc.o CMakeFiles/mandelbrot.dir/calculators/LineMandelCalculator.cc.o CMakeFiles/mandelbrot.dir/calculators/RefMandelCalculator.cc.o CMakeFiles/mandelbrot.dir/common/cnpy.cc.o CMakeFiles/mandelbrot.dir/main.cc.o -o mandelbrot /apps/all/zlib/1.2.12-GCCcore-11.3.0/lib/libz.so
+make[2]: Leaving directory '/scratch/project/dd-23-135/eval-proj01-new/xplagiat'
+[100%] Built target mandelbrot
+make[1]: Leaving directory '/scratch/project/dd-23-135/eval-proj01-new/xplagiat'
+/apps/all/CMake/3.23.1-GCCcore-11.3.0/bin/cmake -E cmake_progress_start /home/icudova/Vyuka/AVS/Assignments/01/Evaluation/eval/xplagiat/CMakeFiles 0
+
+
+Log kompilace (stderr)
+================================================================================
+icpc: remark #10397: optimization reports are generated in *.optrpt files in the output location
+icpc: remark #10397: optimization reports are generated in *.optrpt files in the output location
+icpc: remark #10397: optimization reports are generated in *.optrpt files in the output location
+icpc: remark #10397: optimization reports are generated in *.optrpt files in the output location
+icpc: remark #10397: optimization reports are generated in *.optrpt files in the output location
+icpc: remark #10397: optimization reports are generated in *.optrpt files in the output location
+icpc: remark #10397: optimization reports are generated in *.optrpt files in the output location
+
+
+Log line (stdout)
+================================================================================
+line
+LineMandelCalculator;4096;12288;8192;100;1625
+LineMandelCalculator;4096;12288;8192;100;1627
+LineMandelCalculator;4096;12288;8192;100;1624
+[ok] Results are very close (eps = 0.007% )
+
+
+Log line (stderr)
+================================================================================
+
+
+Log batch (stdout)
+================================================================================
+batch
+BatchMandelCalculator;4096;12288;8192;100;398
+BatchMandelCalculator;4096;12288;8192;100;401
+BatchMandelCalculator;4096;12288;8192;100;400
+[ok] Results are very close (eps = 0.004% )

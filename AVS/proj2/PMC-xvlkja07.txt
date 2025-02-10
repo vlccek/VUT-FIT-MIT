@@ -1,0 +1,131 @@
+Architektury Výpočetních Systémů (AVS 2024)
+Projekt č. 2 (PMC)
+Login: xvlkja07
+
+Úloha 1: Paralelizace původního řešení
+===============================================================================
+1) Kterou ze smyček (viz zadání) je vhodnější paralelizovat a co způsobuje 
+   neefektivitu paralelizaci té druhé?
+
+   Vhodnější je paralelizovat smyčku, která obsahuje více náročné operace tak aby se minimalizovala režije spojená s
+   vytvářením vláken. V tomto případě se jedná smyčku která prochází všechny voxely a volá buildCube. Tato smyčka 8
+   vykoná vnitřní smyčku což jasně dává odpoveď na otázku, která smyčka je náročnější na vyhodnocení. Mimo to jsme
+   se předsvěčil experimentálně -- prostě jsem to vyzkoušel. Další důvodem je že vnitřní smyčka se vybízí vhodněji pro
+   vektorové optimalizace která bych býval použival kdybych mohl.
+
+2) Jak jste ve funkci LoopMeshBuilder::marchCubes zajistili správný výsledek
+  (počet trojúhelníků) vrácený touto funkcí? Popište jaké řešení jste zvolili a proč.
+
+  Určitě by šlo použít redukci a vracet si počet trojuhleníků z každého vlákna a průbězně je pomocí redukce sčítat.
+  Ale tento přístup byl podle mého testování pomalý. Využil jsem toho, že stejně je potřeba aby všechna vlákna svůj
+  výsledek někam uložila. Počet trojuhelníků je tedy přímo roven velikosti pole které je uchováváno. V mých implemetacích
+  si každé vlákno pracuje na svém std::vectoru. Po dokončení si toto vlákno uzamkne výsledný std::vector a "movne"
+  všechny své položky do výsledného std::vectoru (tedy toho který se nakonci vrací jako výsledek pro zapsaní do
+  souboru). Díky tomu že se vlákna něják neblokují je výpočet rychlý  což vedlo k znatelnému zrychlení především u
+  menších vstupů (~50%). Nevýhodou tohoto přístupu je, že je nutné potom výsledný std::vector ještě spojit.
+
+
+3) Jaké plánování (rozdělení práce mezi vlákna) jste zvolili a proč? Popište, na
+   jakých datech (počet vláken, velikost problému) jste k závěrům došli.
+
+   Využil jsem dynamické plánování protože jsem vyzkoušel všechny možné plánování a toto bylo nejrychlejší. Smysl to
+   dává protože spoustu voxelů "neobsahuje" žádnou plochu a tedy by se mohlo stát že by některá vlákna měla mnohem méně
+   práce než jiné. Experimentálně jsem došel k hodnotě 64 pro velikost chunku. Tato hodnota byla nejrychlejší pro
+   všechny vstupy.
+
+Úloha 2: Paralelní průchod stromem
+===============================================================================
+1) Stručně popište použití OpenMP tasků ve vašem řešení.
+
+    Jako task jsem si zvolil vyhodnocení zda je možné aby voxel obashoval trojuhelník nebo ne a následní rozdělení voxel
+    na 8, pokud je možné aby se v ním nacházel povrch. První task je vytvořen v metodě TreeMeshBuilder::marchCubes a
+    rekuzivně se vytvářejí další task-y.
+
+2) Jakou hodnotu cut-off jste zvolili? Jaké hodnoty "cut-off" jste zkoušeli,
+   na jak velkých velikostech problému a jakých času jste dosáhli?
+   Odůvodněte vaši volbu.
+
+   Tím že argumentem programu je na kolik voxelů (jak velký grid se má použít) má tak je cut-off hodnota rovna 1.
+   Protože Je tedy potřeba pracovat až s grid počtem rozdělení. Nic jiného nedává smysl pokud je cílém splnit zadané
+   parametry. Nicméně je možné na cut-off nahlížet jako na velikost hrany a potom by se dali hovořit o podílu počáteční
+   hrany s zadánou mířžkou. Takhle to ale neimplementuju.
+
+   Pokud by jste snad jako cut of chtěl označit hodnotu po které již nejsou generovány tasky tak jsem zkoušel
+   ale pokračuje rekurze v rámce jednoho tasku tak jsem experimentálně došel k hodnotě 8.
+
+3) Jakým způsobem zajišťujete ukládání trojúhelníků z několika vláken současně
+   v metodě LoopMeshBuilder::emitTriangle?
+
+   Velmi podobně jako pro loop implemetaci:
+   Každé vlákno si během své práce uchovává trojúhelníky do vlastního lokálního std::vectoru. Po dokončení práce daného
+   vlákna se jeho lokální std::vector uzamkne a všechny jeho položky se přesunou (pomocí move) do globálního výsledného
+   std::vectoru, který se vrací jako výstup pro následné zapsání do souboru.
+   Tento přístup je efektivní, protože vlákna se navzájem neblokují a mohou zapisovat své výsledky nezávisle. Výsledkem
+   je znatelné zrychlení, především u menších vstupů. Nevýhodou je, že na konci musí být globální std::vector ještě
+   spojen, což může být časově náročné u větších vstupů. Nicméně i při největším vstupu přiloženém k projektu byla
+   ztráta rychlosti minimální. Zkoušel jsem experimentovat i s tím že by dva, nebo 4 vlákna sdíleli stejný std::vector,
+   ale v kombinaci se s zámky to nepomohlo a bylo to pomalejší nebo stejné (a mnohem složitější).
+
+Úloha 3: Grafy škálování všech řešení
+===============================================================================
+
+1) Stručně zhodnoťte efektivitu vytvořených řešení
+   (na základě VŠECH odevzdaných grafů ŠKÁLOVÁNÍ).
+
+    OpenMP Loop je velmi efektivní v obou typech škálování. Při slabém škálování dokáže dobře zpracovávat rostoucí
+    velikost úloh s více vlákny, při silném škálování vykazuje téměř ideální pokles doby výpočtu s rostoucím počtem
+    vláken. Octree je naopak stabilnější při velmi velkých vstupech, ale jeho výkon je omezen režijními náklady, zejména
+    při vyšším počtu vláken. Celkově je OpenMP Loop výkonnější a flexibilnější, zatímco Octree exceluje v robustnosti pro
+    rozsáhlá data.
+
+2) V jakém případě (v závislosti na počtu bodů ve vstupním souboru a velikosti
+   mřížky) bude vaše řešení 1. úlohy neefektivní?
+   (pokud takový případ existuje a je vidět ve vašem grafu)
+
+   Řešení bude více a více neefektivní při rostoucí množině vstupního souboru a jemnjší velikosti mřížky. To je patrné z grafu
+   Grid size scaling, kde s rostoucí velikostí mřížky a vstupním počtem bodů dochází k strmému nárůstu doby výpočtu.
+   Dále bude neefektivní v případě, že vstupem bude malý vstup a bude k dispozici velký počet vláken.
+
+3) Je (nebo není) stromový algoritmus efektivnější z pohledu slabého škálování
+   vzhledem ke vstupu?
+
+    Stromový algoritmus není efektivnější z pohledu slabého škálování vzhledem ke vstupu. I když jsem velmi snažil,
+    aby tomu tak nebylo tak u malý vstupů na jádro graf strmě stoupne.
+
+4) Do souboru 3_4.txt napište svůj login, který používáte na Barboře, na druhý
+   řádek napište počet úloh (jobs), které jste spustili za dobu řešení projektu 2
+   a na třetí řádek uveďte, kolik času tyto úlohy běžely (formát HH:MM:SS).
+   V souboru 3_4.txt využijte předpřipravené kostry - údaje přepište. Můžete využít
+   údajů ze Slurm plánovače, nepočítejte úlohy se suffixem (přepínač -X).
+
+
+Úloha 4: Analýza využití jader pomocí VTune
+================================================================================
+
+1) Jaké bylo průměrné využití jader pro všechny tři implementace s omezením na
+   18 vláken? Hodnoty zapište do souboru 4_1.txt
+   (využijte předpřipravené kostry v souboru - čísla přepište).
+
+   ref:
+   loop:
+   tree:
+
+2) Jaké bylo průměrné využití jader pro všechny tři implementace s využitím
+   všech jader? Hodnoty zapište do souboru 4_2.txt (využijte předpřipravené
+   kostry v souboru - čísla přepište).
+
+   ref:
+   loop:
+   tree:
+
+3) Vypočítejte efektivitu vašeho řešení loop a tree vůči ref pro 18 a 36 vláken.
+   Hodnoty naměřte ručně na výpočetním uzlu, ne přes VTune. Použijte následující parametry:
+
+   ./PMC --builder {ref, tree, loop} -t {18, 36} --grid 128 ../data/bun_zipper_res3.pts
+
+   Hodnoty zapište do souboru 4_3.txt
+   (využijte předpřipravené kostry v souboru - čísla přepište):
+   "loop (18)" vs. "ref"
+   "tree (18)" vs. "ref"
+   "loop (36)" vs. "ref"
+   "tree (36)" vs. "ref"
