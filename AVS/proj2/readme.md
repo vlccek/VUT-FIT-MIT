@@ -1,5 +1,43 @@
+# Hodnocení 
+
+```text
+================================================================================
+## 1: paralelizace puvodniho reseni (5b)
++1.00 b: spravnost vertices a distance: 517224 == 517224 a 0.00 mensi nez 2.0 (max 1 b)
++1.00 b: cas 157 ms do limitu 240 ms (a spravny vystup) (max 1 b)
++0.50 b: bonus za cas do 165 ms (bez SIMD) (max 0.5 b)
+Detekovano SIMD: False
++1.00 b: Q1.1: kterou smycku paralelizovat (max 1 b)
++1.00 b: Q1.2: ukladani trojuhelniku (max 1 b)
++0.50 b: Q1.3: planovani (max 1 b)
+
+## 2: paralelni pruchod stromem (8b)
++3.00 b: spravnost vertices a distance: 517224 == 517224 a 0.00 mensi nez 2.0 (max 3 b)
++2.00 b: cas 57 ms do limitu 100 ms (a spravny vystup) (max 2 b)
++0.50 b: bonus za cas do 70 ms (bez SIMD) (max 0.5 b)
++1.00 b: Q2.1: pouziti tasku (max 1 b)
++0.75 b: Q2.2: cut-off (max 1 b)
++1.00 b: Q2.3: ukladani trojuhelniku (max 1 b)
+Detekovano SIMD: False
+
+## 3: grafy skalovani, VTune (7b)
++1.00 b: Q3.1: efektivita skalovani (max 1 b)
++1.00 b: Q3.2: neefektivita prvni ulohy (max 1 b)
++1.00 b: Q3.3: tree efektivni pro slabe skalovani? (max 1 b)
++1.00 b: Q3.4: Slurm - prace na projektu (max 1 b)
++1.00 b: Q4.1: VTune - 18 jader (max 1 b)
++1.00 b: Q4.2: VTune - 36 jader (max 1 b)
++1.00 b: Q4.2: vypocet efektivity (max 1 b)
+
++0.00 b: bonus/penalta (max 0.0 b)
+Celkem ziskano: 20.25 bodu
+
+Komenar
+======================
+```
+
 # Rady k tomuto projektu
-## Rady k rychlosti:
+## Rady k rychlosti
 - pokud si chcete porovnat výsledky s mými můžete pustit `sbatch bench.sl`.
   - pamatuj však že překladač dělá vělké rozdíly a výsledky se mohou lišit (v moje roce Intel co je specifikován v zadání)
   - moje výsledky tohoto script jsou:
@@ -58,4 +96,5 @@ sacct --starttime 2024-11-20 -p | awk -F'|' '$1 ~ /^[0-9]+$/ {split($9, t, ":");
 ## Zajímave věci
 
 koukněte na soubor `AVS_Projekt 2.pdf` jsou tam něják typické chyby :)
+
 
