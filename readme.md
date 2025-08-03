@@ -29,6 +29,7 @@
 | SUI          | 2nd Project    | 7/7          |                                          |
 | SUI          | 3rd Project    | 6/6          |                                          |
 
+**Table 1: Subject Codes and Names**
 
 ## 1st year - summer
 
@@ -44,14 +45,14 @@
 | PKA          | Practical Conversation, Presentation, and Business Communication in English | Praktická konverzace, prezentování a firemní komunikace v angličtině |
 
 
-| Subject Code | Project           | Points/OutOf | Comment                                 |
-| ------------ | ----------------- | ------------ | --------------------------------------- |
-| BIF          | 1st Project       | 14/14        | |
-| BIN          | Project       | 22/25        | Presentation average,        |
-| FLP          | Project 1 (Haskell)     | 12/12        |                                         |
-| FLP          | Project 2      | 8/8        |                              |
-| KNN          | Project           | 100%        | Excellent including the team video and ussability in reallife.          |                  |
-| PRL          | 1st Project       | 6/10       | Just bad parsing of input.    |
-| PRL          | 2nd Project       | 10/10       |                   |
-| PPP          | Project   | 59/60      | +5 bonus point for using the Kmaping lib                  |         |
-| PKA          | Presentation      | 10/10        | Confident and professional              |
+**Table 2: Project Scores and Comments**
+| Subject Code | Project             | Points/OutOf | Comment                                                      |
+| ------------ | ------------------- | ------------ | ------------------------------------------------------------ |
+| BIF          | 1st Project         | 14/14        |                                                              |
+| BIN          | Project             | 22/25        | Presentation was average.                                    |
+| FLP          | Project 1 (Haskell) | 12/12        |                                                              |
+| FLP          | Project 2   (Prolog)        | 8/8          |                                                              |
+| KNN          | Project             | 100%         | Excellent, including the team video and real-life usability. |
+| PRL          | 1st Project         | 6/10         | Issues with input parsing.                                   |
+| PRL          | 2nd Project         | 10/10        |                                                              |
+| PPP          | Project             | 59/60        | +5 bonus points for using the KMapping library. Presentation was average              |
