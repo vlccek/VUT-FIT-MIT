@@ -1,3 +1,6 @@
 [submodule "KNN/projekt"]
 	path = KNN/projekt
 	url = https://github.com/vlccek/knn-project
+[submodule "BIN"]
+	path = BIN
+	url = https://github.com/vlccek/BIN
