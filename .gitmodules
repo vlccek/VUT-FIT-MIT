@@ -4,3 +4,6 @@
 [submodule "BIN"]
 	path = BIN
 	url = https://github.com/vlccek/BIN
+[submodule "FLP"]
+	path = FLP
+	url = https://github.com/vlccek/FLP
