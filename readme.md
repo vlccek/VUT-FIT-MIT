@@ -28,3 +28,30 @@
 | SUI          | 1st Project    | 7/7          |                                          |
 | SUI          | 2nd Project    | 7/7          |                                          |
 | SUI          | 3rd Project    | 6/6          |                                          |
+
+
+## 1st year - summer
+
+| Subject Code | English Name                                                                | Czech Name                                                           |
+| ------------ | --------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| BIF          | Bioinformatics                                                              | Bioinformatika                                                       |
+| BIN          | Biology-Inspired Computers                                                  | Biologií inspirované počítače                                        |
+| FLP          | Functional and Logic Programming                                            | Funkcionální a logické programování                                  |
+| KNN          | Convolutional Neural Networks                                               | Konvoluční neuronové sítě                                            |
+| MTIa         | Modern Trends in Informatics (in English)                                   | Moderní trendy informatiky (v angličtině)                            |
+| PRL          | Parallel and Distributed Algorithms                                         | Paralelní a distribuované algoritmy                                  |
+| PPP          | Practical Parallel Programming                                              | Praktické paralelní programování                                     |
+| PKA          | Practical Conversation, Presentation, and Business Communication in English | Praktická konverzace, prezentování a firemní komunikace v angličtině |
+
+
+| Subject Code | Project           | Points/OutOf | Comment                                 |
+| ------------ | ----------------- | ------------ | --------------------------------------- |
+| BIF          | 1st Project       | 14/14        | |
+| BIN          | Project       | 22/25        | Presentation average,        |
+| FLP          | Project 1 (Haskell)     | 12/12        |                                         |
+| FLP          | Project 2      | 8/8        |                              |
+| KNN          | Project           | 100%        | Excellent including the team video and ussability in reallife.          |                  |
+| PRL          | 1st Project       | 6/10       | Just bad parsing of input.    |
+| PRL          | 2nd Project       | 10/10       |                   |
+| PPP          | Project   | 59/60      | +5 bonus point for using the Kmaping lib                  |         |
+| PKA          | Presentation      | 10/10        | Confident and professional              |
