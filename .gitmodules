@@ -7,3 +7,6 @@
 [submodule "FLP"]
 	path = FLP
 	url = https://github.com/vlccek/FLP
+[submodule "PPP"]
+	path = PPP
+	url = https://github.com/vlccek/PPP
