@@ -10,3 +10,6 @@
 [submodule "PPP"]
 	path = PPP
 	url = https://github.com/vlccek/PPP
+[submodule "PRL"]
+	path = PRL
+	url = https://github.com/vlccek/PRL
