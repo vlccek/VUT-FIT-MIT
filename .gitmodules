@@ -1,0 +1,3 @@
+[submodule "KNN/projekt"]
+	path = KNN/projekt
+	url = https://github.com/vlccek/knn-project
